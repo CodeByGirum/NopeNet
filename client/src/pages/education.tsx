@@ -3,8 +3,24 @@ import SecurityCards from '@/sections/education/SecurityCards';
 import { Link } from 'wouter';
 import { MessageSquare } from 'lucide-react';
 
+interface SecurityTip {
+  id: string;
+  tip: string;
+}
+
+interface AttackType {
+  id: string;
+  name: string;
+  description: string;
+  tips: SecurityTip[];
+  color: string;
+  gradient: string;
+  icon: string;
+  iconClass: string;
+}
+
 export default function Education() {
-  const { data: securityInfo, isLoading: isSecurityInfoLoading } = useQuery({
+  const { data: securityInfo, isLoading: isSecurityInfoLoading } = useQuery<AttackType[]>({
     queryKey: ['/api/education/attacks'],
   });
   

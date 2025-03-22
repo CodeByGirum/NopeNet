@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { CyberCard, CyberCardContent } from '@/components/ui/cybercard';
 import { Button } from '@/components/ui/button';
 import { apiRequest } from '@/lib/queryClient';
+import { Bot, User, Send, Mic, Loader2 } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -84,23 +85,26 @@ export default function AIAssistant() {
   return (
     <CyberCard>
       <CyberCardContent>
-        <div className="flex items-center mb-6">
-          <div className="h-12 w-12 bg-neon-green/20 rounded-full flex items-center justify-center text-neon-green">
-            <i className="fas fa-robot text-2xl"></i>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center">
+            <div className="h-10 w-10 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-500">
+              <Bot className="w-5 h-5" />
+            </div>
+            <h3 className="ml-3 font-medium text-white">Security Assistant</h3>
           </div>
-          <h3 className="ml-4 font-orbitron font-semibold text-xl">AI Security Assistant</h3>
+          <div className="text-xs text-gray-500">AI-powered analytics and advice</div>
         </div>
         
-        <div className="bg-cyber-dark/60 rounded-lg p-4 max-h-64 overflow-y-auto mb-4">
+        <div className="bg-[#111111] rounded-xl p-4 h-[350px] overflow-y-auto mb-4 border border-[#222222]">
           <div className="flex flex-col space-y-4">
             {messages.map((message) => (
               message.role === 'assistant' ? (
                 // AI Message
                 <div key={message.id} className="flex items-start">
-                  <div className="h-8 w-8 bg-neon-green/20 rounded-full flex items-center justify-center text-neon-green text-sm">
-                    <i className="fas fa-robot"></i>
+                  <div className="h-8 w-8 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 text-sm flex-shrink-0">
+                    <Bot className="w-4 h-4" />
                   </div>
-                  <div className="ml-3 bg-cyber-gray/30 rounded-lg rounded-tl-none p-3 text-sm max-w-3xl">
+                  <div className="ml-3 bg-[#1a1a1a] rounded-xl rounded-tl-none p-3 text-sm max-w-3xl text-gray-300">
                     {message.content.split('\n').map((line, i) => (
                       <p key={i} className={i > 0 ? 'mt-2' : ''}>
                         {line}
@@ -111,11 +115,11 @@ export default function AIAssistant() {
               ) : (
                 // User Message
                 <div key={message.id} className="flex items-start justify-end">
-                  <div className="mr-3 bg-neon-green/20 rounded-lg rounded-tr-none p-3 text-sm max-w-3xl">
+                  <div className="mr-3 bg-blue-500/10 rounded-xl rounded-tr-none p-3 text-sm max-w-3xl text-gray-200">
                     <p>{message.content}</p>
                   </div>
-                  <div className="h-8 w-8 bg-cyber-gray/50 rounded-full flex items-center justify-center text-white text-sm">
-                    <i className="fas fa-user"></i>
+                  <div className="h-8 w-8 bg-[#1a1a1a] rounded-lg flex items-center justify-center text-gray-300 text-sm flex-shrink-0">
+                    <User className="w-4 h-4" />
                   </div>
                 </div>
               )
@@ -125,40 +129,42 @@ export default function AIAssistant() {
         </div>
         
         {/* Chatbot Input */}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="mt-2">
           <div className="relative">
             <input 
               type="text" 
-              placeholder={isSubmitting ? "Thinking..." : "Ask me about network security..."} 
-              className="w-full py-3 px-4 pr-12 bg-cyber-dark/60 border border-cyber-gray/30 rounded-lg focus:outline-none focus:border-neon-green text-white"
+              placeholder={isSubmitting ? "Thinking..." : "Ask about security or request actions..."} 
+              className="w-full py-3 px-4 pr-20 bg-[#111111] border border-[#333333] rounded-full focus:outline-none focus:border-blue-500 text-white"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={isSubmitting}
             />
-            <button 
-              type="submit" 
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neon-green hover:text-neon-lime transition-colors"
-              disabled={isSubmitting || !input.trim()}
-            >
-              {isSubmitting ? (
-                <i className="fas fa-circle-notch fa-spin"></i>
-              ) : (
-                <i className="fas fa-paper-plane"></i>
-              )}
-            </button>
+            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center">
+              <button 
+                type="button"
+                className="p-1.5 text-gray-400 hover:text-blue-400 transition-colors mr-1"
+                onClick={toggleVoiceInput}
+                disabled={isSubmitting}
+              >
+                <Mic className={`w-4 h-4 ${isVoiceActive ? 'text-blue-400 animate-pulse' : ''}`} />
+              </button>
+              <button 
+                type="submit" 
+                className="p-1.5 bg-blue-500 rounded-full text-white hover:bg-blue-600 transition-colors flex items-center justify-center"
+                disabled={isSubmitting || !input.trim()}
+              >
+                {isSubmitting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+              </button>
+            </div>
           </div>
         </form>
         
-        {/* Voice Input Button */}
-        <div className="mt-3 flex justify-end">
-          <button 
-            className={`flex items-center text-sm ${isVoiceActive ? 'text-neon-green' : 'text-gray-400 hover:text-neon-green'} transition-colors`}
-            onClick={toggleVoiceInput}
-            disabled={isSubmitting}
-          >
-            <i className={`fas fa-microphone mr-2 ${isVoiceActive ? 'animate-pulse' : ''}`}></i>
-            <span>{isVoiceActive ? 'Listening...' : 'Ask with voice'}</span>
-          </button>
+        <div className="mt-3 text-xs text-center text-gray-500">
+          Your AI assistant can analyze your security posture and take protective actions when requested
         </div>
       </CyberCardContent>
     </CyberCard>

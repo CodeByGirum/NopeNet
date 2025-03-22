@@ -8,24 +8,15 @@ import Dashboard from "@/pages/dashboard";
 import Intrusions from "@/pages/intrusions";
 import Education from "@/pages/education";
 import Dataset from "@/pages/dataset";
+import Assistant from "@/pages/assistant";
 import NotFound from "@/pages/not-found";
 
 import TopNavigation from "@/components/layout/TopNavigation";
 import Footer from "@/components/layout/Footer";
-import GlitchBackground from "@/components/backgrounds/GlitchBackground";
-import MagneticLines from "@/components/backgrounds/MagneticLines";
-import NoiseBackground from "@/components/backgrounds/NoiseBackground";
 
 function Router() {
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Background Elements */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <GlitchBackground />
-        <MagneticLines />
-        <NoiseBackground />
-      </div>
-
+    <div className="relative min-h-screen overflow-hidden bg-black">
       <TopNavigation />
       
       <main className="relative z-10">
@@ -35,6 +26,7 @@ function Router() {
           <Route path="/intrusions" component={Intrusions} />
           <Route path="/education" component={Education} />
           <Route path="/dataset" component={Dataset} />
+          <Route path="/assistant" component={Assistant} />
           <Route component={NotFound} />
         </Switch>
       </main>
