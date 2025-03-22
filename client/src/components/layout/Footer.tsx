@@ -25,7 +25,7 @@ export default function Footer() {
             <span className="sr-only">Documentation</span>
             <BookOpen className="h-5 w-5" />
           </a>
-          <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
+          <a href="https://github.com/CodeByGirum/nopenet" className="text-gray-400 hover:text-blue-400 transition-colors">
             <span className="sr-only">GitHub</span>
             <Github className="h-5 w-5" />
           </a>
