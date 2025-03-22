@@ -1,6 +1,6 @@
-# Cyber Guardian: Intrusion Detection System
+# NopeNet: Intelligent Intrusion Detection System
 
-![Cyber Guardian](generated-icon.png)
+![NopeNet](generated-icon.png)
 
 A futuristic intrusion detection dashboard with animated UI elements, real-time visualizations, and educational components. This project combines advanced cybersecurity concepts with a modern, intuitive user interface to provide a comprehensive network security monitoring solution.
 
