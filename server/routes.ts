@@ -548,7 +548,7 @@ When asked for recommendations, provide specific actionable steps.`;
       try {
         // Call OpenAI API
         const completion = await openai.chat.completions.create({
-          model: "gpt-3.5-turbo",
+          model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
           messages: formattedMessages,
           max_tokens: 1000,
           temperature: 0.7,
