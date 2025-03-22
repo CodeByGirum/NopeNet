@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 118 100% 54%;
+    --primary-foreground: 222.2 84% 4.9%;
+    
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    
+    --chart-1: 118 100% 54%;
+    --chart-2: 60 100% 50%;
+    --chart-3: 75 100% 50%;
+    --chart-4: 210 100% 50%;
+    --chart-5: 280 100% 50%;
+  }
+  
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-[#0F172A] text-white font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+}
+
+@layer components {
+  .bg-cyber-black {
+    @apply bg-[#0F172A];
+  }
+  
+  .bg-cyber-dark {
+    @apply bg-[#1E293B];
+  }
+  
+  .bg-cyber-gray {
+    @apply bg-[#334155];
+  }
+  
+  .bg-cyber-light {
+    @apply bg-[#475569];
+  }
+  
+  .text-neon-green {
+    @apply text-[#39FF14];
+  }
+  
+  .bg-neon-green {
+    @apply bg-[#39FF14];
+  }
+  
+  .text-neon-yellow {
+    @apply text-[#FFFF00];
+  }
+  
+  .bg-neon-yellow {
+    @apply bg-[#FFFF00];
+  }
+  
+  .text-neon-lime {
+    @apply text-[#BFFF00];
+  }
+  
+  .bg-neon-lime {
+    @apply bg-[#BFFF00];
+  }
+}
+
+@layer utilities {
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-border-pulse {
+    animation: border-pulse 2s infinite;
+  }
+  
+  .animate-gradient-x {
+    animation: gradient-x 3s ease infinite;
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .animate-glitch {
+    animation: glitch 2s infinite;
+  }
+  
+  .animate-count-up {
+    animation: countUp 2s ease-out forwards;
+  }
+}
+
+@keyframes border-pulse {
+  0%, 100% { border-color: rgba(57, 255, 20, 0.8); }
+  50% { border-color: rgba(57, 255, 20, 0.3); }
+}
+
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes glitch {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-3px, 1px); }
+  40% { transform: translate(3px, -1px); }
+  60% { transform: translate(-3px, -1px); }
+  80% { transform: translate(3px, 1px); }
+}
+
+@keyframes countUp {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
