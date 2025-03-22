@@ -1,12 +1,12 @@
 # NopeNet: Intelligent Intrusion Detection System
 
-![NopeNet](generated-icon.png)
+![image](https://github.com/user-attachments/assets/712991d0-0637-4f5b-b390-745ae75b48f3)
+
 
 A futuristic intrusion detection dashboard with animated UI elements, real-time visualizations, and educational components. This project combines advanced cybersecurity concepts with a modern, intuitive user interface to provide a comprehensive network security monitoring solution.
 
 [![GitHub](https://img.shields.io/badge/GitHub-CodeByGirum-blue?logo=github)](https://github.com/CodeByGirum/nopenet)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Open AI](https://img.shields.io/badge/OpenAI-GPT--4o-6a45e4?logo=openai)](https://openai.com/)
 
 ## Features
 
@@ -17,27 +17,24 @@ A futuristic intrusion detection dashboard with animated UI elements, real-time 
 - Comprehensive intrusion logs with filtering and status management
 
 ### Network Scanning
-- Real-time network scanning functionality
-- Vulnerability detection and assessment
+- Real-time network scanning functionality 
+- Vulnerability detection and assessment 
 - Port scanning and service identification
 - Smart recommendations for fixing detected vulnerabilities
 
 ### AI Assistant
-- OpenAI-powered cybersecurity assistant
+- AI- powered cybersecurity assistant
 - Context-aware conversation with security focus
-- Markdown support for formatted responses
 - Network scanning integration for real-time analysis
 
-### Educational Resources
+### Cibersecurity Resources
 - Detailed information about common attack types
-- Interactive security cards with prevention tips
-- Animated visualizations of attack vectors
 
 ### Dataset & Model Visualization
-- Comprehensive KDD Cup dataset information
+- KDD Cup dataset information
 - Dynamic attack category distribution visualization
 - Interactive model architecture diagrams
-- Detection pipeline workflow visualization
+- Detection pipeline workflow visualization (How our system works)
 
 ## Technology Stack
 
