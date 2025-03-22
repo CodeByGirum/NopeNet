@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { CyberCard, CyberCardContent } from '@/components/ui/cybercard';
 import { Button } from '@/components/ui/button';
 import { apiRequest } from '@/lib/queryClient';
-import { Bot, User, Send, Mic, Loader2 } from 'lucide-react';
+import { Bot, User, Send, Mic, Loader2, BarChart } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 interface Message {
   id: string;
@@ -22,11 +23,17 @@ export default function AIAssistant() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [isVoiceActive, setIsVoiceActive] = useState(false);
+  const [sessionId, setSessionId] = useState<string>(Date.now().toString());
   
   // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+  
+  // Create a session ID on component mount
+  useEffect(() => {
+    setSessionId(Date.now().toString());
+  }, []);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +50,31 @@ export default function AIAssistant() {
     setIsSubmitting(true);
     
     try {
-      const response = await apiRequest('POST', '/api/chat', { message: userMessage.content });
+      // Determine if we should include contextual information
+      // For example, if the message contains certain keywords
+      const includeContext = 
+        input.toLowerCase().includes('dashboard') || 
+        input.toLowerCase().includes('scan') || 
+        input.toLowerCase().includes('intrusion') || 
+        input.toLowerCase().includes('attack') ||
+        input.toLowerCase().includes('detect');
+      
+      // If including context, we'd fetch relevant data from other parts of the application
+      // For this example, we'll use a simple contextual object
+      const contextData = includeContext ? {
+        dashboard: {
+          attacks: { total: 250, prevented: 195, active: 55 },
+          topAttackTypes: ['Probe', 'DoS', 'R2L'],
+          recentActivity: 'Multiple probe attempts detected in the last 24 hours'
+        }
+      } : null;
+      
+      const response = await apiRequest('POST', '/api/chat', {
+        message: userMessage.content,
+        sessionId,
+        context: contextData
+      });
+      
       const data = await response.json();
       
       setMessages(prev => [...prev, {
@@ -82,6 +113,124 @@ export default function AIAssistant() {
     }
   };
   
+  interface ScanDevice {
+    deviceIP: string;
+    deviceType: string;
+    vulnerabilities: {
+      severity: string;
+      description: string;
+      affectedService: string;
+    }[];
+    recommendations: string[];
+  }
+  
+  interface ScanResult {
+    summary: {
+      devicesScanned: number;
+      vulnerabilitiesFound: number;
+      criticalIssues: number;
+      scanDuration: string;
+    };
+    findings: ScanDevice[];
+  }
+  
+  const handleScanRequest = async () => {
+    if (isSubmitting) return;
+    
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: "Scan my network for security vulnerabilities."
+    };
+    
+    setMessages(prev => [...prev, userMessage]);
+    setIsSubmitting(true);
+    
+    try {
+      // Trigger the network scan API
+      const scanResponse = await apiRequest('POST', '/api/scan/network');
+      const scanData: ScanResult = await scanResponse.json();
+      
+      // Process scan results
+      const vulnerabilitiesFound = scanData.summary.vulnerabilitiesFound || 0;
+      const criticalIssues = scanData.summary.criticalIssues || 0;
+      
+      // Build a response with the scan results
+      let responseContent = `### Network Scan Complete\n\n`;
+      responseContent += `I've completed a scan of your network and found:\n\n`;
+      responseContent += `- **${scanData.summary.devicesScanned}** devices on your network\n`;
+      responseContent += `- **${vulnerabilitiesFound}** potential vulnerabilities\n`;
+      responseContent += `- **${criticalIssues}** critical security issues\n\n`;
+      
+      if (criticalIssues > 0) {
+        responseContent += `#### Critical Issues:\n\n`;
+        const criticalFindings = scanData.findings
+          .filter((finding: ScanDevice) => finding.vulnerabilities.some((v: {severity: string}) => v.severity === 'critical'))
+          .map((finding: ScanDevice) => {
+            const critVulns = finding.vulnerabilities.filter((v: {severity: string}) => v.severity === 'critical');
+            return {
+              device: `${finding.deviceType} (${finding.deviceIP})`,
+              issues: critVulns.map((v: {description: string}) => v.description).join(', ')
+            };
+          });
+        
+        criticalFindings.forEach((item: {device: string, issues: string}) => {
+          responseContent += `- **${item.device}**: ${item.issues}\n`;
+        });
+        
+        responseContent += `\n#### Recommended Actions:\n\n`;
+        const recommendations = new Set<string>();
+        scanData.findings.forEach((finding: ScanDevice) => {
+          finding.recommendations.forEach((rec: string) => recommendations.add(rec));
+        });
+        
+        Array.from(recommendations).forEach(rec => {
+          responseContent += `- ${rec}\n`;
+        });
+      } else {
+        responseContent += `No critical issues were found, but I recommend regular security audits to maintain your network security posture.`;
+      }
+      
+      // Add the assistant response
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: responseContent
+      }]);
+    } catch (error) {
+      console.error('Error performing network scan:', error);
+      
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: "I'm sorry, I encountered an error while trying to scan your network. Please try again later."
+      }]);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  const renderMarkdown = (content: string) => {
+    return (
+      <ReactMarkdown
+        components={{
+          h3: ({ node, ...props }) => <h3 className="text-blue-400 font-medium mb-2 mt-3" {...props} />,
+          h4: ({ node, ...props }) => <h4 className="text-blue-300 font-medium mb-1 mt-2" {...props} />,
+          p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+          ul: ({ node, ...props }) => <ul className="list-disc pl-5 mb-2" {...props} />,
+          ol: ({ node, ...props }) => <ol className="list-decimal pl-5 mb-2" {...props} />,
+          li: ({ node, ...props }) => <li className="mb-1" {...props} />,
+          strong: ({ node, ...props }) => <strong className="text-white" {...props} />,
+          code: ({ node, ...props }) => <code className="bg-[#222] px-1 py-0.5 rounded" {...props} />,
+          blockquote: ({ node, ...props }) => <blockquote className="border-l-2 border-gray-600 pl-3 italic my-2" {...props} />,
+          a: ({ node, ...props }) => <a className="text-blue-400 hover:underline" {...props} />,
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    );
+  };
+  
   return (
     <CyberCard>
       <CyberCardContent>
@@ -92,7 +241,19 @@ export default function AIAssistant() {
             </div>
             <h3 className="ml-3 font-medium text-white">Security Assistant</h3>
           </div>
-          <div className="text-xs text-gray-500">AI-powered analytics and advice</div>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="text-xs bg-blue-500/10 hover:bg-blue-500/20 border-blue-500/20"
+              onClick={handleScanRequest}
+              disabled={isSubmitting}
+            >
+              <BarChart className="w-3 h-3 mr-1" />
+              Scan Now
+            </Button>
+            <div className="text-xs text-gray-500">AI-powered analytics</div>
+          </div>
         </div>
         
         <div className="bg-[#111111] rounded-xl p-4 h-[350px] overflow-y-auto mb-4 border border-[#222222]">
@@ -105,11 +266,7 @@ export default function AIAssistant() {
                     <Bot className="w-4 h-4" />
                   </div>
                   <div className="ml-3 bg-[#1a1a1a] rounded-xl rounded-tl-none p-3 text-sm max-w-3xl text-gray-300">
-                    {message.content.split('\n').map((line, i) => (
-                      <p key={i} className={i > 0 ? 'mt-2' : ''}>
-                        {line}
-                      </p>
-                    ))}
+                    {renderMarkdown(message.content)}
                   </div>
                 </div>
               ) : (

@@ -91,7 +91,7 @@ async function scanNetwork(): Promise<ScanResult> {
       ];
       
       // Select random ports from common ports
-      const selectedPorts = [];
+      const selectedPorts: number[] = [];
       while (selectedPorts.length < portCount) {
         const randomIndex = Math.floor(Math.random() * commonPorts.length);
         const portInfo = commonPorts[randomIndex];
@@ -202,17 +202,24 @@ async function scanNetwork(): Promise<ScanResult> {
 
 // Format OpenAI messages based on chat history
 function formatOpenAIMessages(messages: any[], systemPrompt: string, additionalContext?: string) {
-  const formattedMessages = [
+  type ChatRole = 'system' | 'user' | 'assistant';
+  
+  const formattedMessages: { role: ChatRole, content: string }[] = [
     { 
-      role: "system", 
+      role: 'system', 
       content: systemPrompt + (additionalContext ? `\n\n${additionalContext}` : '')
     }
   ];
   
   // Add conversation history
   for (const msg of messages) {
+    // Ensure role is valid
+    const role = msg.role === 'user' || msg.role === 'assistant' ? 
+      msg.role as ChatRole : 
+      'user'; // Default to user if invalid
+      
     formattedMessages.push({
-      role: msg.role,
+      role,
       content: msg.content
     });
   }
