@@ -360,9 +360,32 @@ export default function Dataset() {
         <CyberCard className="mb-8 overflow-hidden group relative hover:border-cyan-500 transition-colors duration-300">
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <CyberCardContent>
-            <div className="flex items-center mb-6">
-              <Cpu className="w-6 h-6 text-cyan-500 mr-3" />
-              <h3 className="font-semibold text-xl">Ensemble Model Architecture</h3>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <Cpu className="w-6 h-6 text-cyan-500 mr-3" />
+                <h3 className="font-semibold text-xl">Ensemble Model Architecture</h3>
+              </div>
+              <button 
+                onClick={() => setShowEnsembleDetails(!showEnsembleDetails)}
+                className={`px-3 py-1 text-xs rounded-full transition-all duration-300 flex items-center
+                  ${showEnsembleDetails 
+                    ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' 
+                    : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 border border-gray-700'}`}
+              >
+                {showEnsembleDetails ? 'Hide Details' : 'Show All Details'}
+                <ChevronRight className={`w-3 h-3 ml-1 transition-transform duration-300 ${showEnsembleDetails ? 'rotate-90' : ''}`} />
+              </button>
+            </div>
+            
+            <div className="mb-6 bg-gradient-to-r from-[#111]/80 to-[#222]/80 p-4 rounded-lg border border-cyan-500/20">
+              <p className="text-gray-300 text-sm">
+                Our ensemble approach leverages the strengths of three distinct model architectures: 
+                <span className="text-green-400 font-medium"> CNN</span> for spatial pattern detection, 
+                <span className="text-amber-400 font-medium"> DNN</span> for complex feature relationships, and 
+                <span className="text-red-400 font-medium"> Random Forest</span> for robust classification. 
+                The models work in parallel and their predictions are combined using a weighted voting mechanism that 
+                adapts based on confidence scores and historical performance.
+              </p>
             </div>
             
             <div className="relative">
