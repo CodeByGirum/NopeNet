@@ -87,21 +87,25 @@ These models work together to provide comprehensive protection against various a
 - Demonstration of ML/AI applications in cybersecurity
 
 ## Screenshots
+### Dashboard
+![image](https://github.com/user-attachments/assets/6aefb604-0be8-402a-9b2b-b24dbff461a6)
+---
+### Resources
+![image](https://github.com/user-attachments/assets/9bd1f6fe-9ed4-448b-891d-0f5611119704)
+---
+### Dataset 
+![image](https://github.com/user-attachments/assets/b2caa00a-fc20-406a-ade1-69707542ec91)
+![image](https://github.com/user-attachments/assets/df3c36b4-2ee1-4c1d-8e02-59f45228747c)
+---
+### Security Assistant
+![image](https://github.com/user-attachments/assets/0a24380b-4651-4b76-ae81-07edd66e1d24)
+![image](https://github.com/user-attachments/assets/3e780c22-6691-4546-8595-f2bedaf3745d)
+![image](https://github.com/user-attachments/assets/6cbe8d1e-0871-4084-ad8e-1ae1bf3bc4bd)
 
-<table>
-  <tr>
-    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/dashboard.png" alt="Dashboard" /></td>
-    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/intrusions.png" alt="Intrusions" /></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/assistant.png" alt="AI Assistant" /></td>
-    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/education.png" alt="Education" /></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/dataset.png" alt="Dataset" /></td>
-    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/scan.png" alt="Network Scan" /></td>
-  </tr>
-</table>
+### Alerts
+![image](https://github.com/user-attachments/assets/77f23e49-3f67-4bfc-aaf8-21da27946809)
+
+
 
 *Note: Placeholder images will be replaced with actual screenshots when the repository is created.*
 
@@ -120,8 +124,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-*Note: This is a demonstration project showcasing UI/UX design and integration capabilities. The intrusion detection functionality is simulated for demonstration purposes.*
 
 ## Acknowledgments
 
