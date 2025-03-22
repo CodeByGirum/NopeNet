@@ -4,6 +4,10 @@
 
 A futuristic intrusion detection dashboard with animated UI elements, real-time visualizations, and educational components. This project combines advanced cybersecurity concepts with a modern, intuitive user interface to provide a comprehensive network security monitoring solution.
 
+[![GitHub](https://img.shields.io/badge/GitHub-CodeByGirum-blue?logo=github)](https://github.com/CodeByGirum/nopenet)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Open AI](https://img.shields.io/badge/OpenAI-GPT--4o-6a45e4?logo=openai)](https://openai.com/)
+
 ## Features
 
 ### Dashboard
@@ -87,12 +91,44 @@ These models work together to provide comprehensive protection against various a
 
 ## Screenshots
 
-*(Screenshots would be included here)*
+<table>
+  <tr>
+    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/dashboard.png" alt="Dashboard" /></td>
+    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/intrusions.png" alt="Intrusions" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/assistant.png" alt="AI Assistant" /></td>
+    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/education.png" alt="Education" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/dataset.png" alt="Dataset" /></td>
+    <td><img src="https://github.com/CodeByGirum/nopenet/raw/main/docs/screenshots/scan.png" alt="Network Scan" /></td>
+  </tr>
+</table>
+
+*Note: Placeholder images will be replaced with actual screenshots when the repository is created.*
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 *Note: This is a demonstration project showcasing UI/UX design and integration capabilities. The intrusion detection functionality is simulated for demonstration purposes.*
+
+## Acknowledgments
+
+- [KDD Cup Dataset](http://kdd.ics.uci.edu/databases/kddcup99/kddcup99.html) for providing the data used in model demonstrations
+- [shadcn/ui](https://ui.shadcn.com/) for the excellent React component library
+- [Tailwind CSS](https://tailwindcss.com/) for styling
+- [OpenAI](https://openai.com/) for the AI assistant capabilities
