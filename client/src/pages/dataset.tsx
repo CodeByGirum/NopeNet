@@ -10,8 +10,37 @@ import {
 import { 
   Bot, Cpu, Network, ShieldCheck, Zap, Activity, 
   Database, Search, AlertTriangle, Lock, Server, 
-  FileText, ChevronRight
+  FileText, ChevronRight, Grid, Shield
 } from 'lucide-react';
+
+// Custom Trees icon for Random Forest visualization
+function Trees(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="24" 
+      height="24" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      {...props}
+    >
+      <path d="M10 10v.2A3 3 0 0 1 8.9 14v0H5v0h0a3 3 0 0 1-1-5.8V8a3 3 0 0 1 4-2.8" />
+      <path d="M7 15v2" />
+      <path d="M14 6v-.2A3 3 0 0 1 15.1 2v0H19v0h0a3 3 0 0 1 1 5.8V8a3 3 0 0 1-4 2.8" />
+      <path d="M17 9v6" />
+      <path d="M13 17v-2" />
+      <path d="M13 14h1" />
+      <path d="M7 11h1" />
+      <path d="M19 11h1" />
+      <path d="M17 15h4" />
+      <path d="M7 19h10" />
+    </svg>
+  );
+}
 
 export default function Dataset() {
   const { data: datasetInfo, isLoading } = useQuery({
@@ -151,44 +180,64 @@ export default function Dataset() {
               
               <h4 className="font-medium text-white mb-2 mt-6">Attack Categories:</h4>
               <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-6">
-                <div className="bg-gradient-to-br from-green-500/20 to-green-700/20 p-3 rounded-lg border border-green-500/30 flex flex-col items-center text-center">
-                  <div className="h-10 w-10 rounded-full bg-green-500/30 flex items-center justify-center mb-2">
+                <div className="bg-gradient-to-br from-green-500/20 to-green-700/20 p-3 rounded-lg border border-green-500/30 flex flex-col items-center text-center group relative overflow-hidden">
+                  <div className="absolute inset-0 bg-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="h-10 w-10 rounded-full bg-green-500/30 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
                     <Server className="w-5 h-5 text-green-400" />
                   </div>
                   <span className="font-medium text-green-400">Normal</span>
                   <span className="text-xs text-gray-400 mt-1">Legitimate traffic</span>
+                  <div className="hidden group-hover:block absolute -bottom-1 left-0 right-0 bg-gradient-to-t from-green-500/30 to-transparent p-2 transform transition-transform duration-300 text-xs text-green-300 max-h-24 overflow-y-auto z-10">
+                    Regular network traffic without malicious intent
+                  </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-red-500/20 to-red-700/20 p-3 rounded-lg border border-red-500/30 flex flex-col items-center text-center">
-                  <div className="h-10 w-10 rounded-full bg-red-500/30 flex items-center justify-center mb-2">
+                <div className="bg-gradient-to-br from-red-500/20 to-red-700/20 p-3 rounded-lg border border-red-500/30 flex flex-col items-center text-center group relative overflow-hidden">
+                  <div className="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="h-10 w-10 rounded-full bg-red-500/30 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
                     <Zap className="w-5 h-5 text-red-400" />
                   </div>
                   <span className="font-medium text-red-400">DoS</span>
                   <span className="text-xs text-gray-400 mt-1">Denial of Service</span>
+                  <div className="hidden group-hover:block absolute -bottom-1 left-0 right-0 bg-gradient-to-t from-red-500/30 to-transparent p-2 transform transition-transform duration-300 text-xs text-red-300 max-h-24 overflow-y-auto z-10">
+                    Back, Land, Neptune, Pod, Smurf, Teardrop - Overwhelms systems and makes them unavailable
+                  </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-amber-500/20 to-amber-700/20 p-3 rounded-lg border border-amber-500/30 flex flex-col items-center text-center">
-                  <div className="h-10 w-10 rounded-full bg-amber-500/30 flex items-center justify-center mb-2">
+                <div className="bg-gradient-to-br from-amber-500/20 to-amber-700/20 p-3 rounded-lg border border-amber-500/30 flex flex-col items-center text-center group relative overflow-hidden">
+                  <div className="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="h-10 w-10 rounded-full bg-amber-500/30 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
                     <Search className="w-5 h-5 text-amber-400" />
                   </div>
                   <span className="font-medium text-amber-400">Probe</span>
                   <span className="text-xs text-gray-400 mt-1">Surveillance</span>
+                  <div className="hidden group-hover:block absolute -bottom-1 left-0 right-0 bg-gradient-to-t from-amber-500/30 to-transparent p-2 transform transition-transform duration-300 text-xs text-amber-300 max-h-24 overflow-y-auto z-10">
+                    IPsweep, Nmap, Portsweep, Satan - Scans networks to identify vulnerabilities
+                  </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-lime-500/20 to-lime-700/20 p-3 rounded-lg border border-lime-500/30 flex flex-col items-center text-center">
-                  <div className="h-10 w-10 rounded-full bg-lime-500/30 flex items-center justify-center mb-2">
+                <div className="bg-gradient-to-br from-lime-500/20 to-lime-700/20 p-3 rounded-lg border border-lime-500/30 flex flex-col items-center text-center group relative overflow-hidden">
+                  <div className="absolute inset-0 bg-lime-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="h-10 w-10 rounded-full bg-lime-500/30 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
                     <Network className="w-5 h-5 text-lime-400" />
                   </div>
                   <span className="font-medium text-lime-400">R2L</span>
                   <span className="text-xs text-gray-400 mt-1">Remote to Local</span>
+                  <div className="hidden group-hover:block absolute -bottom-1 left-0 right-0 bg-gradient-to-t from-lime-500/30 to-transparent p-2 transform transition-transform duration-300 text-xs text-lime-300 max-h-24 overflow-y-auto z-10">
+                    FTP_write, Guess_passwd, Imap, Multihop, Phf, Spy, Warezclient, Warezmaster - Unauthorized access from remote machine
+                  </div>
                 </div>
                 
-                <div className="bg-gradient-to-br from-blue-500/20 to-blue-700/20 p-3 rounded-lg border border-blue-500/30 flex flex-col items-center text-center">
-                  <div className="h-10 w-10 rounded-full bg-blue-500/30 flex items-center justify-center mb-2">
+                <div className="bg-gradient-to-br from-blue-500/20 to-blue-700/20 p-3 rounded-lg border border-blue-500/30 flex flex-col items-center text-center group relative overflow-hidden">
+                  <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="h-10 w-10 rounded-full bg-blue-500/30 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
                     <Lock className="w-5 h-5 text-blue-400" />
                   </div>
                   <span className="font-medium text-blue-400">U2R</span>
                   <span className="text-xs text-gray-400 mt-1">User to Root</span>
+                  <div className="hidden group-hover:block absolute -bottom-1 left-0 right-0 bg-gradient-to-t from-blue-500/30 to-transparent p-2 transform transition-transform duration-300 text-xs text-blue-300 max-h-24 overflow-y-auto z-10">
+                    Buffer_overflow, Loadmodule, Perl, Rootkit - Unauthorized access to local superuser privileges
+                  </div>
                 </div>
               </div>
               
