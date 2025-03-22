@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'wouter';
 import { useState } from 'react';
 import { Shield, Bot } from 'lucide-react';
+import TextPressure from '@/components/text/TextPressure';
 
 export default function TopNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,8 +15,16 @@ export default function TopNavigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center flex-shrink-0">
             <Link href="/">
-              <div className="font-medium text-xl text-white">
-                CyberGuard
+              <div className="flex items-center">
+                <TextPressure 
+                  text="NopeNet" 
+                  fontSize={24} 
+                  color="#ffffff" 
+                  hoverColor="#00f5ff" 
+                  textShadowColor="rgba(0, 245, 255, 0.8)"
+                  className="font-bold"
+                  duration={0.2}
+                />
               </div>
             </Link>
           </div>

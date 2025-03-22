@@ -1,5 +1,6 @@
 import { Link } from 'wouter';
 import { Shield, ShieldAlert, ShieldCheck } from 'lucide-react';
+import TextPressure from '@/components/text/TextPressure';
 
 export default function HeroSection() {
   return (
@@ -8,10 +9,19 @@ export default function HeroSection() {
         <div className="relative flex flex-col md:flex-row items-center">
           {/* Hero Content */}
           <div className="w-full md:w-1/2 mb-12 md:mb-0 text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight tracking-tight mb-6">
-              <span className="block text-white mb-2">Intelligent</span>
-              <span className="block bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                Intrusion Detection
+            <h1 className="font-medium leading-tight tracking-tight mb-6">
+              <div className="block mb-2">
+                <TextPressure 
+                  text="NopeNet" 
+                  fontSize={64} 
+                  color="#ffffff" 
+                  hoverColor="#00f5ff" 
+                  textShadowColor="rgba(0, 245, 255, 0.8)"
+                  className="tracking-tight font-bold"
+                />
+              </div>
+              <span className="block text-4xl md:text-5xl lg:text-6xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                Intelligent Intrusion Detection
               </span>
             </h1>
             <p className="text-lg md:text-xl my-8 text-gray-300 max-w-xl">

@@ -1,5 +1,6 @@
 import { Link } from 'wouter';
 import { BookOpen, Github, Mail } from 'lucide-react';
+import TextPressure from '@/components/text/TextPressure';
 
 export default function Footer() {
   return (
@@ -7,11 +8,19 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
         <div className="mb-6 md:mb-0">
           <Link href="/">
-            <a className="font-medium text-xl text-white">
-              CyberGuard
+            <a className="font-medium text-xl">
+              <TextPressure 
+                text="NopeNet" 
+                fontSize={24} 
+                color="#ffffff" 
+                hoverColor="#00f5ff" 
+                textShadowColor="rgba(0, 245, 255, 0.8)"
+                className="font-bold"
+                duration={0.2}
+              />
             </a>
           </Link>
-          <p className="text-sm text-gray-500 mt-2">Real-time network intrusion detection powered by AI</p>
+          <p className="text-sm text-gray-500 mt-2">Intelligent network intrusion detection powered by AI</p>
         </div>
         <div className="flex space-x-8">
           <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
@@ -29,7 +38,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-[#222222] text-center text-xs text-gray-500">
-        <p>&copy; {new Date().getFullYear()} CyberGuard. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} NopeNet. All rights reserved.</p>
         <p className="mt-1">Developed using KDD Cup dataset for machine learning-based intrusion detection system.</p>
       </div>
     </footer>
