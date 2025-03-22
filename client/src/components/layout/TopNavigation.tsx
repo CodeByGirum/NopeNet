@@ -14,37 +14,37 @@ export default function TopNavigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center flex-shrink-0">
             <Link href="/">
-              <a className="font-medium text-xl text-white">
+              <div className="font-medium text-xl text-white">
                 CyberGuard
-              </a>
+              </div>
             </Link>
           </div>
           
           <div className="hidden md:flex md:items-center md:space-x-6">
             <Link href="/dashboard">
-              <a className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/dashboard') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/dashboard') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Dashboard
-              </a>
+              </div>
             </Link>
             <Link href="/intrusions">
-              <a className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/intrusions') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/intrusions') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Intrusions
-              </a>
+              </div>
             </Link>
             <Link href="/education">
-              <a className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/education') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/education') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Education
-              </a>
+              </div>
             </Link>
             <Link href="/dataset">
-              <a className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/dataset') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/dataset') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Dataset
-              </a>
+              </div>
             </Link>
             <Link href="/assistant">
-              <a className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/assistant') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`px-3 py-2 text-sm font-medium transition-colors ${isActive('/assistant') ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Assistant
-              </a>
+              </div>
             </Link>
             
             <button className="ml-3 px-5 py-2 text-sm font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-200 flex items-center">
@@ -54,10 +54,10 @@ export default function TopNavigation() {
           </div>
           
           <div className="flex items-center md:hidden">
-            <Link href="/assistant" className="mr-4">
-              <a className={`p-2 rounded-full ${isActive('/assistant') ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-white'}`}>
+            <Link href="/assistant">
+              <div className={`p-2 rounded-full mr-4 ${isActive('/assistant') ? 'bg-blue-500/20 text-blue-400' : 'text-gray-400 hover:text-white'}`}>
                 <Bot className="w-5 h-5" />
-              </a>
+              </div>
             </Link>
             
             <button 
@@ -89,29 +89,29 @@ export default function TopNavigation() {
         <div className="md:hidden">
           <div className="pt-2 pb-4 space-y-1 bg-black/95 backdrop-blur-xl border-b border-[#222222]">
             <Link href="/dashboard">
-              <a className={`block px-4 py-3 text-base font-medium ${isActive('/dashboard') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`block px-4 py-3 text-base font-medium ${isActive('/dashboard') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Dashboard
-              </a>
+              </div>
             </Link>
             <Link href="/intrusions">
-              <a className={`block px-4 py-3 text-base font-medium ${isActive('/intrusions') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`block px-4 py-3 text-base font-medium ${isActive('/intrusions') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Intrusions
-              </a>
+              </div>
             </Link>
             <Link href="/education">
-              <a className={`block px-4 py-3 text-base font-medium ${isActive('/education') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`block px-4 py-3 text-base font-medium ${isActive('/education') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Education
-              </a>
+              </div>
             </Link>
             <Link href="/dataset">
-              <a className={`block px-4 py-3 text-base font-medium ${isActive('/dataset') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`block px-4 py-3 text-base font-medium ${isActive('/dataset') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Dataset
-              </a>
+              </div>
             </Link>
             <Link href="/assistant">
-              <a className={`block px-4 py-3 text-base font-medium ${isActive('/assistant') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
+              <div className={`block px-4 py-3 text-base font-medium ${isActive('/assistant') ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}>
                 Assistant
-              </a>
+              </div>
             </Link>
             <div className="px-4 py-3">
               <button className="w-full px-5 py-2 text-sm font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-200 flex items-center justify-center">
