@@ -84,7 +84,7 @@ export default function Dataset() {
   }, []);
   
   // Custom circle animation for radar
-  const CustomizedDot = (props) => {
+  const CustomizedDot = (props: any) => {
     const { cx, cy, value } = props;
     return (
       <circle 
@@ -100,7 +100,7 @@ export default function Dataset() {
   };
   
   // Animated pie chart active sector
-  const renderActiveShape = (props) => {
+  const renderActiveShape = (props: any) => {
     const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
     
     return (
@@ -610,10 +610,9 @@ export default function Dataset() {
                           endAngle={360}
                         >
                           <RadialBar 
-                            minAngle={15} 
                             background
                             dataKey="value" 
-                            label={{ position: 'insideStart', fill: '#fff', fontWeight: 'bold', fontSize: 10 }} 
+                            label={{ position: 'insideStart', fill: '#fff', fontWeight: 'bold', fontSize: 10 }}
                           />
                           <Legend 
                             iconType="circle" 

@@ -35,6 +35,33 @@ export default function AIAssistant() {
     setSessionId(Date.now().toString());
   }, []);
   
+  // Add animation styles for chat messages
+  useEffect(() => {
+    // Create style element for animations
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      .animate-fadeIn {
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+    `;
+    document.head.appendChild(styleEl);
+    
+    return () => {
+      document.head.removeChild(styleEl);
+    };
+  }, []);
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isSubmitting) return;
