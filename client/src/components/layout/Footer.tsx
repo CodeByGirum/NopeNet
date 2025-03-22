@@ -7,18 +7,16 @@ export default function Footer() {
     <footer className="mt-16 py-8 px-4 sm:px-6 lg:px-8 border-t border-[#222222] bg-black">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
         <div className="mb-6 md:mb-0">
-          <Link href="/">
-            <a className="font-medium text-xl">
-              <TextPressure 
-                text="NopeNet" 
-                fontSize={24} 
-                color="#ffffff" 
-                hoverColor="#00f5ff" 
-                textShadowColor="rgba(0, 245, 255, 0.8)"
-                className="font-bold"
-                duration={0.2}
-              />
-            </a>
+          <Link href="/" className="font-medium text-xl">
+            <TextPressure 
+              text="NopeNet" 
+              fontSize={24} 
+              color="#ffffff" 
+              hoverColor="#00f5ff" 
+              textShadowColor="rgba(0, 245, 255, 0.8)"
+              className="font-bold"
+              duration={0.2}
+            />
           </Link>
           <p className="text-sm text-gray-500 mt-2">Intelligent network intrusion detection powered by AI</p>
         </div>

@@ -27,13 +27,11 @@ export default function HeroSection() {
             <p className="text-lg md:text-xl my-8 text-gray-300 max-w-xl">
               Real-time network security with advanced machine learning models that protect your infrastructure from emerging threats.
             </p>
-            <Link href="/dashboard">
-              <a className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-200">
-                <span>Get Started</span>
-                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                </svg>
-              </a>
+            <Link href="/dashboard" className="inline-flex items-center justify-center px-6 py-3 text-base font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-200">
+              <span>Get Started</span>
+              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+              </svg>
             </Link>
           </div>
           
