@@ -236,47 +236,54 @@ export default function AIAssistant() {
       <CyberCardContent>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
-            <div className="h-10 w-10 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-500">
-              <Bot className="w-5 h-5" />
+            <div className="h-12 w-12 bg-gradient-to-br from-blue-500/30 to-indigo-600/30 rounded-xl flex items-center justify-center text-blue-400 p-2 border border-blue-500/20 shadow-lg overflow-hidden relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl blur opacity-10 group-hover:opacity-30 transition-opacity duration-300 animate-pulse"></div>
+              <Bot className="w-6 h-6 relative z-10" />
             </div>
-            <h3 className="ml-3 font-medium text-white">Security Assistant</h3>
+            <div className="ml-3">
+              <h3 className="font-medium text-white">Security Assistant</h3>
+              <p className="text-xs text-blue-400">Powered by OpenAI</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Button 
               variant="outline" 
               size="sm"
-              className="text-xs bg-blue-500/10 hover:bg-blue-500/20 border-blue-500/20"
+              className="text-xs bg-gradient-to-r from-blue-500/10 to-indigo-600/10 hover:from-blue-500/20 hover:to-indigo-600/20 border-blue-500/20 shadow-md"
               onClick={handleScanRequest}
               disabled={isSubmitting}
             >
-              <BarChart className="w-3 h-3 mr-1" />
+              <div className="relative mr-2">
+                <BarChart className="w-4 h-4 relative z-10" />
+                <div className="absolute -inset-1 bg-blue-500 rounded-full blur-sm opacity-30 animate-ping"></div>
+              </div>
               Scan Now
             </Button>
-            <div className="text-xs text-gray-500">AI-powered analytics</div>
           </div>
         </div>
         
-        <div className="bg-[#111111] rounded-xl p-4 h-[350px] overflow-y-auto mb-4 border border-[#222222]">
-          <div className="flex flex-col space-y-4">
+        <div className="chat-area bg-gradient-to-b from-[#0a0a0a] to-[#111] rounded-xl p-4 h-[350px] overflow-y-auto mb-4 border border-[#333] shadow-inner flex flex-col space-y-4">
+          <div className="flex-grow flex flex-col space-y-4">
             {messages.map((message) => (
               message.role === 'assistant' ? (
                 // AI Message
-                <div key={message.id} className="flex items-start">
-                  <div className="h-8 w-8 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400 text-sm flex-shrink-0">
-                    <Bot className="w-4 h-4" />
+                <div key={message.id} className="flex items-start animate-fadeIn">
+                  <div className="h-10 w-10 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-xl flex items-center justify-center text-blue-400 text-sm flex-shrink-0 border border-blue-500/20 shadow-md">
+                    <Bot className="w-5 h-5" />
                   </div>
-                  <div className="ml-3 bg-[#1a1a1a] rounded-xl rounded-tl-none p-3 text-sm max-w-3xl text-gray-300">
+                  <div className="ml-3 bg-gradient-to-br from-[#1a1a1a] to-[#222] rounded-xl rounded-tl-none p-4 text-sm max-w-3xl text-gray-300 shadow-md border border-gray-700/30">
                     {renderMarkdown(message.content)}
                   </div>
                 </div>
               ) : (
                 // User Message
-                <div key={message.id} className="flex items-start justify-end">
-                  <div className="mr-3 bg-blue-500/10 rounded-xl rounded-tr-none p-3 text-sm max-w-3xl text-gray-200">
+                <div key={message.id} className="flex items-start justify-end animate-fadeIn">
+                  <div className="mr-3 bg-gradient-to-br from-blue-600/20 to-indigo-600/20 rounded-xl rounded-tr-none p-4 text-sm max-w-3xl text-gray-200 shadow-md border border-blue-500/20">
                     <p>{message.content}</p>
                   </div>
-                  <div className="h-8 w-8 bg-[#1a1a1a] rounded-lg flex items-center justify-center text-gray-300 text-sm flex-shrink-0">
-                    <User className="w-4 h-4" />
+                  <div className="h-10 w-10 bg-gradient-to-br from-[#222] to-[#333] rounded-xl flex items-center justify-center text-gray-300 text-sm flex-shrink-0 border border-gray-700/30 shadow-md">
+                    <User className="w-5 h-5" />
                   </div>
                 </div>
               )
@@ -285,40 +292,46 @@ export default function AIAssistant() {
           </div>
         </div>
         
-        {/* Chatbot Input */}
-        <form onSubmit={handleSubmit} className="mt-2">
-          <div className="relative">
-            <input 
-              type="text" 
-              placeholder={isSubmitting ? "Thinking..." : "Ask about security or request actions..."} 
-              className="w-full py-3 px-4 pr-20 bg-[#111111] border border-[#333333] rounded-full focus:outline-none focus:border-blue-500 text-white"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              disabled={isSubmitting}
-            />
-            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center">
-              <button 
-                type="button"
-                className="p-1.5 text-gray-400 hover:text-blue-400 transition-colors mr-1"
-                onClick={toggleVoiceInput}
+        {/* Modern Chatbot Input */}
+        <form onSubmit={handleSubmit} className="mt-4">
+          <div className="relative bg-gradient-to-r from-[#1a1a1a]/90 to-[#222]/90 rounded-2xl p-1.5 shadow-xl border border-gray-700/30 backdrop-blur-sm">
+            <div className="flex">
+              <input 
+                type="text" 
+                placeholder={isSubmitting ? "Thinking..." : "Ask about security or request actions..."} 
+                className="w-full py-3 px-4 bg-transparent text-gray-200 placeholder-gray-500 focus:outline-none font-light"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
                 disabled={isSubmitting}
-              >
-                <Mic className={`w-4 h-4 ${isVoiceActive ? 'text-blue-400 animate-pulse' : ''}`} />
-              </button>
-              <button 
-                type="submit" 
-                className="p-1.5 bg-blue-500 rounded-full text-white hover:bg-blue-600 transition-colors flex items-center justify-center"
-                disabled={isSubmitting || !input.trim()}
-              >
-                {isSubmitting ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Send className="w-4 h-4" />
-                )}
-              </button>
+              />
+              
+              <div className="flex items-center space-x-2 pr-2">
+                <button 
+                  type="button"
+                  className={`p-2 rounded-full transition-all duration-300 ${isVoiceActive ? 'bg-blue-500 text-white' : 'text-gray-400 hover:bg-blue-500/10 hover:text-blue-400'}`}
+                  onClick={toggleVoiceInput}
+                  disabled={isSubmitting}
+                >
+                  <Mic className={`w-5 h-5 ${isVoiceActive ? 'animate-pulse' : ''}`} />
+                </button>
+                
+                <button 
+                  type="submit" 
+                  className="p-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full text-white shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isSubmitting || !input.trim()}
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Send className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </form>
+        
+        {/* Animation styles added via useEffect */}
         
         <div className="mt-3 text-xs text-center text-gray-500">
           Your AI assistant can analyze your security posture and take protective actions when requested

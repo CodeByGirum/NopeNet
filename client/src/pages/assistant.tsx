@@ -313,8 +313,52 @@ export default function Assistant() {
           </div>
           
           {/* Right column - AI Assistant */}
-          <div className="lg:col-span-5">
-            <AIAssistant />
+          <div className="lg:col-span-5 relative">
+            <div className="absolute top-0 right-0 z-10">
+              <button 
+                onClick={() => {
+                  // Get the chat container element
+                  const chatContainer = document.getElementById('chat-container');
+                  // Toggle fullscreen class
+                  if (chatContainer) {
+                    chatContainer.classList.toggle('fixed');
+                    chatContainer.classList.toggle('inset-0');
+                    chatContainer.classList.toggle('z-50');
+                    chatContainer.classList.toggle('bg-black');
+                    chatContainer.classList.toggle('p-6');
+                    chatContainer.classList.toggle('lg:p-12');
+                    
+                    // Toggle the height of the chat area
+                    const chatArea = chatContainer.querySelector('.chat-area');
+                    if (chatArea) {
+                      chatArea.classList.toggle('h-[calc(100vh-200px)]');
+                      chatArea.classList.toggle('h-[350px]');
+                    }
+                  }
+                }}
+                className="p-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 rounded-lg"
+                title="Toggle fullscreen mode"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  className="w-5 h-5"
+                >
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+                  <path d="M21 8V5a2 2 0 0 0-2-2h-3"></path>
+                  <path d="M3 16v3a2 2 0 0 0 2 2h3"></path>
+                  <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+                </svg>
+              </button>
+            </div>
+            <div id="chat-container" className="transition-all duration-300 ease-in-out">
+              <AIAssistant />
+            </div>
           </div>
         </div>
       </div>
