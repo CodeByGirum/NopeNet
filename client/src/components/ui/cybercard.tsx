@@ -11,17 +11,17 @@ interface CyberCardProps {
 export function CyberCard({ 
   children, 
   className, 
-  highlightColor = "bg-neon-green",
+  highlightColor = "bg-blue-500",
   hoverEffect = true
 }: CyberCardProps) {
   return (
     <div className={cn(
-      "bg-cyber-black/60 border border-cyber-gray/30 rounded-lg shadow-lg", 
-      hoverEffect && "transform hover:scale-105 transition-transform duration-300",
+      "bg-[#111111] border border-[#222222] rounded-xl shadow-lg backdrop-blur-sm", 
+      hoverEffect && "transition-all duration-300 hover:border-[#333333]",
       className
     )}>
       {highlightColor && (
-        <div className={`h-1 rounded-t-lg ${highlightColor}`}></div>
+        <div className={`h-0.5 rounded-t-xl ${highlightColor}`}></div>
       )}
       {children}
     </div>
@@ -30,7 +30,7 @@ export function CyberCard({
 
 export function CyberCardContent({ children, className }: { children: ReactNode, className?: string }) {
   return (
-    <div className={cn("p-6", className)}>
+    <div className={cn("p-5", className)}>
       {children}
     </div>
   );
@@ -38,7 +38,7 @@ export function CyberCardContent({ children, className }: { children: ReactNode,
 
 export function CyberCardFooter({ children, className }: { children: ReactNode, className?: string }) {
   return (
-    <div className={cn("pt-4 mt-4 border-t border-cyber-gray/30", className)}>
+    <div className={cn("pt-4 mt-4 border-t border-[#222222]", className)}>
       {children}
     </div>
   );
@@ -57,10 +57,10 @@ export function CyberCardHeader({
 }) {
   return (
     <div className={cn("flex items-center mb-4", className)}>
-      <div className={cn("h-12 w-12 rounded-full flex items-center justify-center text-2xl", iconClass || "bg-neon-green/20 text-neon-green")}>
+      <div className={cn("h-10 w-10 rounded-lg flex items-center justify-center text-xl", iconClass || "bg-blue-500/10 text-blue-400")}>
         {icon}
       </div>
-      <h3 className="ml-4 font-orbitron font-semibold text-xl">{title}</h3>
+      <h3 className="ml-3 font-medium text-base">{title}</h3>
     </div>
   );
 }
