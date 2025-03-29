@@ -1,0 +1,4 @@
+random_forest: models/rf/random_forest_kdd99_model.pkl
+cnn: models/cnn/cnn_kdd99_model.pkl
+dnn: models/dnn/dnn_kdd99_model.pkl
+svm: models/svm/svm_kdd99_model.pkl

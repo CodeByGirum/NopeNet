@@ -44,13 +44,13 @@ async function scanNetwork(): Promise<ScanResult> {
   const timestamp = new Date().toISOString();
   
   try {
-    // This would normally involve actual network scanning tools
-    // For demo purposes, we'll simulate a scan with realistic data
+    // Start scan time for performance measurement
+    const startTime = Date.now();
     
-    // Simulate scan duration
-    const scanDuration = Math.floor(Math.random() * 15) + 5; // 5-20 seconds
+    // Use our ML models for intrusion detection via the Python bridge
+    // We'll generate realistic network traffic data and then analyze it with the ML ensemble
     
-    // Create findings for 5-10 devices
+    // Create sample traffic data for 5-10 devices
     const deviceCount = Math.floor(Math.random() * 6) + 5;
     const findings = [];
     let criticalCount = 0;
@@ -70,120 +70,221 @@ async function scanNetwork(): Promise<ScanResult> {
       return `${range}.${host}`;
     };
     
+    // Generate network traffic data for analysis
+    const trafficData = [];
+    const commonPorts = [
+      { port: 22, service: 'SSH' },
+      { port: 80, service: 'HTTP' },
+      { port: 443, service: 'HTTPS' },
+      { port: 21, service: 'FTP' },
+      { port: 25, service: 'SMTP' },
+      { port: 53, service: 'DNS' },
+      { port: 3389, service: 'RDP' },
+      { port: 445, service: 'SMB' },
+      { port: 137, service: 'NetBIOS' },
+      { port: 8080, service: 'HTTP Alternate' }
+    ];
+    
+    // Generate traffic data for each device
     for (let i = 0; i < deviceCount; i++) {
       const deviceIP = generateIP();
       const deviceType = deviceTypes[Math.floor(Math.random() * deviceTypes.length)];
       
-      // Generate 1-5 open ports
-      const portCount = Math.floor(Math.random() * 5) + 1;
-      const openPorts = [];
-      const commonPorts = [
-        { port: 22, service: 'SSH' },
-        { port: 80, service: 'HTTP' },
-        { port: 443, service: 'HTTPS' },
-        { port: 21, service: 'FTP' },
-        { port: 25, service: 'SMTP' },
-        { port: 53, service: 'DNS' },
-        { port: 3389, service: 'RDP' },
-        { port: 445, service: 'SMB' },
-        { port: 137, service: 'NetBIOS' },
-        { port: 8080, service: 'HTTP Alternate' }
-      ];
-      
-      // Select random ports from common ports
-      const selectedPorts: number[] = [];
-      while (selectedPorts.length < portCount) {
-        const randomIndex = Math.floor(Math.random() * commonPorts.length);
-        const portInfo = commonPorts[randomIndex];
-        if (!selectedPorts.includes(portInfo.port)) {
-          selectedPorts.push(portInfo.port);
-          openPorts.push({
-            port: portInfo.port,
-            service: portInfo.service,
-            status: Math.random() < 0.8 ? 'filtered' : 'open'
-          });
-        }
+      // Generate KDD Cup 1999 style features for ML analysis
+      // Simplified set of features for our demo
+      trafficData.push({
+        src: deviceIP,
+        dst: generateIP(), // Destination IP
+        protocol_type: ['tcp', 'udp', 'icmp'][Math.floor(Math.random() * 3)],
+        service: Math.random() < 0.7 ? commonPorts[Math.floor(Math.random() * commonPorts.length)].service.toLowerCase() : 'other',
+        flag: ['SF', 'S0', 'REJ', 'RSTO', 'SH'][Math.floor(Math.random() * 5)],
+        src_bytes: Math.floor(Math.random() * 10000),
+        dst_bytes: Math.floor(Math.random() * 10000),
+        land: Math.random() < 0.05 ? 1 : 0,
+        wrong_fragment: Math.random() < 0.1 ? Math.floor(Math.random() * 3) : 0,
+        urgent: Math.random() < 0.05 ? Math.floor(Math.random() * 5) : 0,
+        hot: Math.random() < 0.1 ? Math.floor(Math.random() * 10) : 0,
+        num_failed_logins: Math.random() < 0.1 ? Math.floor(Math.random() * 5) : 0,
+        logged_in: Math.random() < 0.6 ? 1 : 0,
+        num_compromised: Math.random() < 0.05 ? Math.floor(Math.random() * 5) : 0,
+        root_shell: Math.random() < 0.02 ? 1 : 0,
+        su_attempted: Math.random() < 0.01 ? 1 : 0,
+        num_root: Math.random() < 0.05 ? Math.floor(Math.random() * 5) : 0,
+        num_file_creations: Math.random() < 0.2 ? Math.floor(Math.random() * 10) : 0,
+        num_shells: Math.random() < 0.01 ? Math.floor(Math.random() * 2) : 0,
+        num_access_files: Math.random() < 0.1 ? Math.floor(Math.random() * 5) : 0,
+        count: Math.floor(Math.random() * 100),
+        srv_count: Math.floor(Math.random() * 50),
+        timestamp: timestamp
+      });
+    }
+    
+    // Use Python script to analyze the traffic with ML ensemble
+    try {
+      // Call the Python intrusion detection script with our traffic data
+      const pythonScript = `
+import sys
+import json
+import os
+
+# Add the current directory to the Python path
+sys.path.append(os.getcwd())
+
+# Import our detection function
+from intrusion_detector import process_json_input
+
+# Read input traffic data
+input_data = json.loads('''${JSON.stringify({ traffic: trafficData })}''')
+
+# Process the data
+results = process_json_input(json.dumps(input_data))
+
+# Output results as JSON
+print(json.dumps(results))
+`;
+
+      const { stdout } = await execAsync(`python3 -c "${pythonScript}"`);
+      const detectionResults = JSON.parse(stdout);
+
+      if (detectionResults.error) {
+        throw new Error(`ML detection error: ${detectionResults.error}`);
       }
+
+      // Calculate scan duration (time taken for the ML analysis)
+      const scanDuration = Math.round((Date.now() - startTime) / 1000);
       
-      // Generate 0-3 vulnerabilities per device
-      const vulnPerDevice = Math.floor(Math.random() * 4);
-      const vulnerabilities = [];
+      // Process the ML detection results and create vulnerability findings
       const vulnDescriptions = [
-        { severity: 'critical', description: 'Outdated firmware with known exploits', affectedService: 'System' },
-        { severity: 'high', description: 'Weak password policy detected', affectedService: 'Authentication' },
-        { severity: 'medium', description: 'TLS 1.0/1.1 supported', affectedService: 'HTTPS' },
-        { severity: 'high', description: 'SMB signing not required', affectedService: 'SMB' },
-        { severity: 'critical', description: 'Remote code execution vulnerability', affectedService: 'RDP' },
-        { severity: 'medium', description: 'Anonymous FTP access enabled', affectedService: 'FTP' },
-        { severity: 'low', description: 'HTTP server information disclosure', affectedService: 'HTTP' },
-        { severity: 'high', description: 'Default credentials in use', affectedService: 'Authentication' }
+        { severity: 'critical', description: 'Potential DoS attack detected', affectedService: 'Network' },
+        { severity: 'high', description: 'Port scan detected', affectedService: 'Security' },
+        { severity: 'critical', description: 'Possible remote code execution', affectedService: 'System' },
+        { severity: 'high', description: 'Suspicious login attempt', affectedService: 'Authentication' },
+        { severity: 'medium', description: 'Unusual network traffic pattern', affectedService: 'Network' }
       ];
       
-      // Select random vulnerabilities
-      for (let j = 0; j < vulnPerDevice; j++) {
-        const randomVuln = vulnDescriptions[Math.floor(Math.random() * vulnDescriptions.length)];
-        vulnerabilities.push(randomVuln);
+      // Map attack types to severity and description
+      const attackTypeMap = {
+        'normal': { severity: 'low', description: 'Normal traffic pattern', affectedService: 'Network' },
+        'DoS': { severity: 'critical', description: 'Denial of Service attack', affectedService: 'Network' },
+        'Probe': { severity: 'high', description: 'Network probe or scan', affectedService: 'Security' },
+        'R2L': { severity: 'critical', description: 'Remote to Local attack', affectedService: 'Authentication' },
+        'U2R': { severity: 'critical', description: 'User to Root attack', affectedService: 'System' }
+      };
+      
+      // Create findings based on ML detection
+      for (const result of detectionResults.results) {
+        if (result.attackType === 'normal') continue; // Skip normal traffic
+        
+        const deviceIP = result.sourceIp;
+        const deviceType = deviceTypes[Math.floor(Math.random() * deviceTypes.length)];
+        // Use type assertion to help TypeScript understand this is a valid key
+        const attackType = result.attackType as keyof typeof attackTypeMap;
+        const attackInfo = attackTypeMap[attackType] || 
+                         { severity: 'medium', description: 'Unknown attack pattern', affectedService: 'Network' };
+
+        // Generate ports for this device
+        const portCount = Math.floor(Math.random() * 3) + 1;
+        const openPorts = [];
+        const selectedPorts: number[] = [];
+        
+        while (selectedPorts.length < portCount) {
+          const randomIndex = Math.floor(Math.random() * commonPorts.length);
+          const portInfo = commonPorts[randomIndex];
+          if (!selectedPorts.includes(portInfo.port)) {
+            selectedPorts.push(portInfo.port);
+            openPorts.push({
+              port: portInfo.port,
+              service: portInfo.service,
+              status: Math.random() < 0.6 ? 'filtered' : 'open'
+            });
+          }
+        }
+        
+        // Create vulnerability based on ML detection
+        const vulnerability = {
+          severity: attackInfo.severity,
+          description: `${attackInfo.description} (${Math.round(result.confidence * 100)}% confidence)`,
+          affectedService: attackInfo.affectedService
+        };
+        
+        // Generate recommendations
+        const recommendations = [
+          `Monitor ${deviceIP} for further ${result.attackType} activities`,
+          'Update intrusion detection signatures'
+        ];
+        
+        if (vulnerability.severity === 'critical' || vulnerability.severity === 'high') {
+          recommendations.push('Isolate the affected device for further analysis');
+          if (result.attackType === 'DoS') {
+            recommendations.push('Implement rate limiting and traffic filtering');
+          } else if (result.attackType === 'Probe') {
+            recommendations.push('Review firewall rules to block scanning activities');
+          } else if (result.attackType === 'R2L') {
+            recommendations.push('Enforce strong authentication mechanisms');
+          } else if (result.attackType === 'U2R') {
+            recommendations.push('Review and limit privileged access');
+          }
+        }
+        
+        // Add to findings
+        findings.push({
+          deviceIP,
+          deviceType,
+          openPorts,
+          vulnerabilities: [vulnerability],
+          recommendations
+        });
+        
+        // Count vulnerabilities for summary
         vulnCount++;
-        if (randomVuln.severity === 'critical') {
+        if (vulnerability.severity === 'critical') {
           criticalCount++;
         }
-      }
-      
-      // Generate recommendations
-      const recommendations = [];
-      if (vulnerabilities.find(v => v.severity === 'critical' || v.severity === 'high')) {
-        recommendations.push('Update firmware to latest version');
-        recommendations.push('Implement strong password policy');
-      }
-      if (openPorts.find(p => p.status === 'open')) {
-        recommendations.push('Filter unnecessary open ports');
-      }
-      if (vulnerabilities.find(v => v.affectedService === 'Authentication')) {
-        recommendations.push('Enable multi-factor authentication');
-      }
-      
-      findings.push({
-        deviceIP,
-        deviceType,
-        openPorts,
-        vulnerabilities,
-        recommendations
-      });
-    }
-    
-    // Create scan result
-    const result: ScanResult = {
-      id: scanId,
-      timestamp,
-      findings,
-      summary: {
-        devicesScanned: deviceCount,
-        vulnerabilitiesFound: vulnCount,
-        criticalIssues: criticalCount,
-        scanDuration: `${scanDuration}s`
-      }
-    };
-    
-    // Store the scan result
-    scanResults.set(scanId, result);
-    
-    // Create an intrusion record for each critical vulnerability
-    if (criticalCount > 0) {
-      findings.forEach(device => {
-        const criticalVulns = device.vulnerabilities.filter(v => v.severity === 'critical');
-        criticalVulns.forEach(async (vuln) => {
-          await storage.createIntrusion({
-            sourceIp: device.deviceIP,
-            attackTypeId: Math.floor(Math.random() * 5) + 1, // Random attack type ID
-            confidence: Math.random() * 40 + 60, // 60-100% confidence
-            status: 'detected',
-            details: `Critical vulnerability: ${vuln.description} on ${device.deviceType} (${vuln.affectedService})`
-          });
+        
+        // Create intrusion record for the attack
+        // Map attack types to our database attack type IDs
+        const attackTypeIdMap = {
+          'DoS': 1,
+          'Probe': 2,
+          'R2L': 3,
+          'U2R': 4,
+          'Unknown': 5
+        };
+        
+        await storage.createIntrusion({
+          sourceIp: deviceIP,
+          attackTypeId: attackTypeIdMap[attackType as keyof typeof attackTypeIdMap] || 5, // Map to attack type ID
+          confidence: result.confidence * 100, // Convert to percentage
+          status: 'detected',
+          details: `${attackInfo.description} detected by ML ensemble with ${Math.round(result.confidence * 100)}% confidence`
         });
-      });
+      }
+      
+      // No longer needed - will use scanResult below
+      // Removing this duplicate declaration
+      
+      // Create scan result
+      const scanResult: ScanResult = {
+        id: scanId,
+        timestamp,
+        findings,
+        summary: {
+          devicesScanned: deviceCount,
+          vulnerabilitiesFound: vulnCount,
+          criticalIssues: criticalCount,
+          scanDuration: `${scanDuration}s`
+        }
+      };
+      
+      // Store the scan result
+      scanResults.set(scanId, scanResult);
+      
+      return scanResult;
+    } catch (error) {
+      console.error('ML intrusion detection error:', error);
+      // Fall back to a simple scan in case of ML error
+      throw error;
     }
-    
-    return result;
   } catch (error) {
     console.error('Error during network scan:', error);
     return {

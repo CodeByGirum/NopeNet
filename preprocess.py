@@ -2,73 +2,49 @@
 """
 NopeNet - Network Data Preprocessing
 This script provides utilities to preprocess network traffic data for ML models.
+Specifically designed to work with KDD Cup 1999 dataset features and our ensemble
+of RF, CNN, and DNN models.
 """
 
+import os
 import numpy as np
-from typing import Dict, List, Tuple, Union, Any
+from typing import List, Dict, Any, Union, Tuple
 
-# Typical network traffic features that might be used in intrusion detection
+# Define KDD Cup 1999 dataset feature names
 NETWORK_FEATURES = [
+    # Basic features
     'duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes',
-    'land', 'wrong_fragment', 'urgent', 'hot', 'num_failed_logins', 'logged_in',
-    'num_compromised', 'root_shell', 'su_attempted', 'num_root', 'num_file_creations',
-    'num_shells', 'num_access_files', 'num_outbound_cmds', 'is_host_login',
-    'is_guest_login', 'count', 'srv_count', 'serror_rate', 'srv_serror_rate',
-    'rerror_rate', 'srv_rerror_rate', 'same_srv_rate', 'diff_srv_rate',
-    'srv_diff_host_rate', 'dst_host_count', 'dst_host_srv_count',
-    'dst_host_same_srv_rate', 'dst_host_diff_srv_rate', 'dst_host_same_src_port_rate',
-    'dst_host_srv_diff_host_rate', 'dst_host_serror_rate', 'dst_host_srv_serror_rate',
-    'dst_host_rerror_rate', 'dst_host_srv_rerror_rate'
+    'land', 'wrong_fragment', 'urgent',
+    
+    # Content features
+    'hot', 'num_failed_logins', 'logged_in', 'num_compromised', 'root_shell',
+    'su_attempted', 'num_root', 'num_file_creations', 'num_shells',
+    'num_access_files', 'num_outbound_cmds', 'is_host_login', 'is_guest_login',
+    
+    # Traffic features
+    'count', 'srv_count', 'serror_rate', 'srv_serror_rate', 'rerror_rate',
+    'srv_rerror_rate', 'same_srv_rate', 'diff_srv_rate', 'srv_diff_host_rate',
+    
+    # Time-based traffic features
+    'dst_host_count', 'dst_host_srv_count', 'dst_host_same_srv_rate',
+    'dst_host_diff_srv_rate', 'dst_host_same_src_port_rate',
+    'dst_host_srv_diff_host_rate', 'dst_host_serror_rate',
+    'dst_host_srv_serror_rate', 'dst_host_rerror_rate', 'dst_host_srv_rerror_rate'
 ]
 
-# Map of categorical features to their possible values
+# Define categorical features and their possible values
 CATEGORICAL_FEATURES = {
     'protocol_type': ['tcp', 'udp', 'icmp'],
-    'service': [
-        'http', 'ftp', 'smtp', 'ssh', 'telnet', 'dns', 'pop3', 'imap', 
-        'ntp', 'irc', 'ssl', 'radius', 'snmp', 'domain_u', 'other'
-    ],
-    'flag': ['SF', 'S0', 'REJ', 'RSTO', 'RSTR', 'SH', 'S1', 'S2', 'S3', 'OTH']
-}
-
-# Mapping of attack types to broader categories
-ATTACK_CATEGORIES = {
-    'normal': 'normal',
-    'neptune': 'DoS',
-    'back': 'DoS',
-    'land': 'DoS',
-    'pod': 'DoS',
-    'smurf': 'DoS',
-    'teardrop': 'DoS',
-    'mailbomb': 'DoS',
-    'apache2': 'DoS',
-    'processtable': 'DoS',
-    'udpstorm': 'DoS',
-    'satan': 'Probe',
-    'ipsweep': 'Probe',
-    'portsweep': 'Probe',
-    'nmap': 'Probe',
-    'mscan': 'Probe',
-    'saint': 'Probe',
-    'buffer_overflow': 'U2R',
-    'loadmodule': 'U2R',
-    'perl': 'U2R',
-    'rootkit': 'U2R',
-    'xterm': 'U2R',
-    'ps': 'U2R',
-    'sqlattack': 'U2R',
-    'httptunnel': 'U2R',
-    'ftp_write': 'R2L',
-    'guess_passwd': 'R2L',
-    'imap': 'R2L',
-    'multihop': 'R2L',
-    'phf': 'R2L',
-    'spy': 'R2L',
-    'warezclient': 'R2L',
-    'warezmaster': 'R2L',
-    'snmpguess': 'R2L',
-    'worm': 'R2L',
-    'snmpgetattack': 'R2L'
+    'service': ['http', 'smtp', 'finger', 'domain_u', 'auth', 'telnet', 'ftp', 'eco_i', 
+                'ntp_u', 'ecr_i', 'other', 'private', 'pop_3', 'ftp_data', 'rje', 'time', 
+                'mtp', 'link', 'remote_job', 'gopher', 'ssh', 'name', 'whois', 'domain', 
+                'login', 'imap4', 'daytime', 'ctf', 'nntp', 'shell', 'IRC', 'nnsp', 'http_443', 
+                'exec', 'printer', 'efs', 'courier', 'uucp', 'klogin', 'kshell', 'echo', 
+                'discard', 'systat', 'supdup', 'iso_tsap', 'hostnames', 'csnet_ns', 'pop_2', 
+                'sunrpc', 'uucp_path', 'netbios_ns', 'netbios_ssn', 'netbios_dgm', 'sql_net', 
+                'vmnet', 'bgp', 'Z39_50', 'ldap', 'netstat', 'urh_i', 'X11', 'urp_i', 'pm_dump', 
+                'tftp_u', 'tim_i', 'red_i'],
+    'flag': ['SF', 'S0', 'REJ', 'RSTO', 'RSTR', 'S1', 'S2', 'S3', 'OTH', 'RSTOS0', 'SH']
 }
 
 def normalize_numerical_features(data: np.ndarray, 
@@ -88,24 +64,22 @@ def normalize_numerical_features(data: np.ndarray,
     normalized_data = data.copy()
     
     for idx in feature_indices:
-        feature_data = normalized_data[:, idx]
+        feature_values = normalized_data[:, idx].astype(float)
         
-        # Handle outliers
         if clip_outliers:
-            q1, q3 = np.percentile(feature_data, [25, 75])
-            iqr = q3 - q1
-            lower_bound = q1 - 1.5 * iqr
-            upper_bound = q3 + 1.5 * iqr
-            feature_data = np.clip(feature_data, lower_bound, upper_bound)
+            # Clip values beyond 3 standard deviations
+            mean = np.mean(feature_values)
+            std = np.std(feature_values)
+            feature_values = np.clip(feature_values, mean - 3*std, mean + 3*std)
         
-        # Normalize to [0,1]
-        min_val = np.min(feature_data)
-        max_val = np.max(feature_data)
+        # Min-max normalization
+        min_val = np.min(feature_values)
+        max_val = np.max(feature_values)
         
         if max_val > min_val:
-            normalized_data[:, idx] = (feature_data - min_val) / (max_val - min_val)
+            normalized_data[:, idx] = (feature_values - min_val) / (max_val - min_val)
         else:
-            normalized_data[:, idx] = 0  # If all values are the same
+            normalized_data[:, idx] = 0  # Handle constant features
             
     return normalized_data
 
@@ -121,36 +95,22 @@ def one_hot_encode_categorical(data: np.ndarray,
     Returns:
         Data with one-hot encoded categorical features
     """
-    # First determine the output size
-    num_samples = data.shape[0]
-    num_features = data.shape[1]
+    # Start with numerical features
+    numerical_indices = [i for i in range(data.shape[1]) if i not in categorical_features]
+    result = data[:, numerical_indices].astype(float)
     
-    # Calculate how many columns we'll add
-    additional_columns = sum(len(values) for values in categorical_features.values())
-    
-    # Create the output array
-    encoded_data = np.zeros((num_samples, num_features + additional_columns))
-    
-    # Copy over the original non-categorical features
-    categorical_indices = list(categorical_features.keys())
-    non_categorical_indices = [i for i in range(num_features) if i not in categorical_indices]
-    
-    # Copy non-categorical features directly
-    for i, orig_idx in enumerate(non_categorical_indices):
-        encoded_data[:, i] = data[:, orig_idx]
-    
-    # Now add the one-hot encoded features
-    current_col = len(non_categorical_indices)
-    
-    for feat_idx, possible_values in categorical_features.items():
-        feature_data = data[:, feat_idx]
+    # Process each categorical feature
+    for idx, possible_values in categorical_features.items():
+        # Extract the categorical column
+        cat_col = data[:, idx]
         
+        # Create one-hot encoding
         for value in possible_values:
-            matches = (feature_data == value)
-            encoded_data[:, current_col] = matches.astype(int)
-            current_col += 1
-            
-    return encoded_data
+            # Create a new binary column for this category value
+            new_col = (cat_col == value).astype(float)
+            result = np.column_stack((result, new_col))
+    
+    return result
 
 def extract_features_from_packet_capture(pcap_data: List[Dict]) -> np.ndarray:
     """
@@ -162,30 +122,25 @@ def extract_features_from_packet_capture(pcap_data: List[Dict]) -> np.ndarray:
     Returns:
         Feature matrix for ML model input
     """
-    # This is a placeholder - in a real implementation, this would parse 
-    # actual packet capture data and extract relevant features
+    # Initialize empty feature array
     num_samples = len(pcap_data)
     num_features = len(NETWORK_FEATURES)
+    features = np.zeros((num_samples, num_features), dtype=object)
     
-    features = np.zeros((num_samples, num_features))
-    
+    # Fill in the features based on packet data
     for i, packet in enumerate(pcap_data):
-        # Extract each feature from the packet data
         for j, feature_name in enumerate(NETWORK_FEATURES):
             if feature_name in packet:
-                # Convert categorical features to numeric codes
-                if feature_name in CATEGORICAL_FEATURES:
-                    # Get the index of the value in the possible values list
-                    value = packet[feature_name]
-                    possible_values = CATEGORICAL_FEATURES[feature_name]
-                    if value in possible_values:
-                        features[i, j] = possible_values.index(value)
-                    else:
-                        # Use the last index for 'other' or unknown values
-                        features[i, j] = len(possible_values) - 1
+                features[i, j] = packet[feature_name]
+            else:
+                # Use appropriate default value based on feature type
+                if feature_name in ['protocol_type', 'service', 'flag']:
+                    features[i, j] = 'other'
+                elif feature_name in ['land', 'wrong_fragment', 'urgent', 'hot', 
+                                     'logged_in', 'is_host_login', 'is_guest_login']:
+                    features[i, j] = 0
                 else:
-                    # For numerical features, just use the value
-                    features[i, j] = packet[feature_name]
+                    features[i, j] = 0.0
     
     return features
 
@@ -199,20 +154,21 @@ def preprocess_for_prediction(raw_data: np.ndarray) -> np.ndarray:
     Returns:
         Preprocessed data ready for ML model input
     """
-    # Identify numerical feature indices (assume all are numerical except known categorical)
-    categorical_indices = {}
-    for i, feature in enumerate(NETWORK_FEATURES):
-        if feature in CATEGORICAL_FEATURES:
-            categorical_indices[i] = CATEGORICAL_FEATURES[feature]
+    # Identify numerical and categorical feature indices
+    numerical_indices = [i for i in range(raw_data.shape[1]) 
+                        if i not in [1, 2, 3]]  # Indices of protocol_type, service, flag
     
-    numerical_indices = [i for i in range(len(NETWORK_FEATURES)) 
-                        if i not in categorical_indices]
+    categorical_features = {
+        1: CATEGORICAL_FEATURES['protocol_type'],
+        2: CATEGORICAL_FEATURES['service'],
+        3: CATEGORICAL_FEATURES['flag']
+    }
     
     # Normalize numerical features
     normalized_data = normalize_numerical_features(raw_data, numerical_indices)
     
     # One-hot encode categorical features
-    preprocessed_data = one_hot_encode_categorical(normalized_data, categorical_indices)
+    preprocessed_data = one_hot_encode_categorical(normalized_data, categorical_features)
     
     return preprocessed_data
 
@@ -226,50 +182,69 @@ def generate_sample_network_data(num_samples: int = 10) -> np.ndarray:
     Returns:
         Sample network traffic data
     """
-    # This is just for demonstration - real data would come from network traffic
-    np.random.seed(42)  # For reproducibility
+    # Initialize empty feature array
+    features = np.zeros((num_samples, len(NETWORK_FEATURES)), dtype=object)
     
-    # Create a sample data array
-    data = np.zeros((num_samples, len(NETWORK_FEATURES)))
-    
-    # Fill with random values
-    for i in range(len(NETWORK_FEATURES)):
-        feature_name = NETWORK_FEATURES[i]
+    # Generate random data
+    for i in range(num_samples):
+        # Categorical features
+        features[i, 1] = np.random.choice(CATEGORICAL_FEATURES['protocol_type'])
+        features[i, 2] = np.random.choice(CATEGORICAL_FEATURES['service'])
+        features[i, 3] = np.random.choice(CATEGORICAL_FEATURES['flag'])
         
-        if feature_name in CATEGORICAL_FEATURES:
-            # For categorical features, assign random categories
-            categories = CATEGORICAL_FEATURES[feature_name]
-            category_indices = np.random.randint(0, len(categories), size=num_samples)
-            data[:, i] = category_indices
-        else:
-            # For numerical features, assign random values
-            if 'bytes' in feature_name:
-                # Use larger range for byte counts
-                data[:, i] = np.random.randint(0, 10000, size=num_samples)
-            elif 'rate' in feature_name:
-                # Use [0,1] for rates
-                data[:, i] = np.random.random(size=num_samples)
-            elif 'count' in feature_name:
-                # Use moderate range for counts
-                data[:, i] = np.random.randint(0, 100, size=num_samples)
+        # Numerical features - use appropriate distributions
+        features[i, 0] = np.random.exponential(100)  # duration
+        features[i, 4] = np.random.exponential(1000)  # src_bytes
+        features[i, 5] = np.random.exponential(1000)  # dst_bytes
+        
+        # Binary features
+        features[i, 6] = np.random.choice([0, 1], p=[0.99, 0.01])  # land
+        features[i, 7] = np.random.choice([0, 1, 2, 3], p=[0.95, 0.03, 0.01, 0.01])  # wrong_fragment
+        features[i, 8] = np.random.choice([0, 1, 2], p=[0.99, 0.007, 0.003])  # urgent
+        
+        # Other features with typical distributions
+        for j in range(9, len(NETWORK_FEATURES)):
+            if j in [11, 22]:  # logged_in, is_guest_login
+                features[i, j] = np.random.choice([0, 1], p=[0.4, 0.6])
+            elif j in [12, 13, 14, 15, 16, 17, 18, 19]:  # Rare events
+                features[i, j] = np.random.choice([0, 1, 2, 3], p=[0.97, 0.02, 0.007, 0.003])
             else:
-                # Default range for other numerical features
-                data[:, i] = np.random.randint(0, 10, size=num_samples)
+                # Continuous features
+                features[i, j] = np.random.exponential(10)
     
-    return data
+    return features
 
 if __name__ == "__main__":
-    # Demonstrate preprocessing
+    # Generate some sample data for testing
     print("Generating sample network traffic data...")
     sample_data = generate_sample_network_data(5)
     
-    print("\nSample raw data (first 5 features only):")
-    for i in range(5):
-        feature_values = sample_data[i, :5]
-        print(f"Sample {i+1}: {feature_values}")
+    print("\nRaw sample data shape:", sample_data.shape)
+    print("Sample data (first row):", sample_data[0])
     
-    print("\nPreprocessing data...")
+    # Preprocess the data
+    print("\nPreprocessing sample data...")
     preprocessed_data = preprocess_for_prediction(sample_data)
     
-    print(f"\nPreprocessed data shape: {preprocessed_data.shape}")
-    print("After preprocessing, the data is ready for model input")
+    print("Preprocessed data shape:", preprocessed_data.shape)
+    print("Preprocessed data (first few features of first row):", preprocessed_data[0, :5])
+    
+    print("\nSimulating packet capture data...")
+    packet_data = []
+    for i in range(3):
+        packet = {
+            'src': f'192.168.1.{np.random.randint(1, 255)}',
+            'dst': f'10.0.0.{np.random.randint(1, 255)}',
+            'protocol_type': np.random.choice(['tcp', 'udp', 'icmp']),
+            'service': np.random.choice(['http', 'ftp', 'ssh']),
+            'duration': np.random.exponential(100),
+            'src_bytes': np.random.exponential(1000),
+            'dst_bytes': np.random.exponential(500)
+        }
+        packet_data.append(packet)
+    
+    print(f"Extracted {len(packet_data)} packets")
+    features = extract_features_from_packet_capture(packet_data)
+    print("Extracted feature shape:", features.shape)
+    preprocessed = preprocess_for_prediction(features)
+    print("Preprocessed feature shape:", preprocessed.shape)
