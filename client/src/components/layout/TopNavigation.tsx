@@ -1,13 +1,68 @@
 import { Link, useLocation } from 'wouter';
 import { useState } from 'react';
-import { Shield, Bot } from 'lucide-react';
+import { Shield, Bot, AlertOctagon } from 'lucide-react';
 import TextPressure from '@/components/text/TextPressure';
+import { useToast } from '@/hooks/use-toast';
+import { apiRequest } from '@/lib/queryClient';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function TopNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
   const [location] = useLocation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const isActive = (path: string) => location === path;
+  
+  // Handler for network scan button
+  const handleNetworkScan = async () => {
+    if (isScanning) return;
+    
+    setIsScanning(true);
+    toast({
+      title: "Network Scan Initiated",
+      description: "Scanning your network for potential security threats...",
+      duration: 3000,
+    });
+    
+    try {
+      const response = await apiRequest('POST', '/api/scan/network');
+      const result = await response.json();
+      
+      // Invalidate queries to refresh data
+      queryClient.invalidateQueries({ queryKey: ['/api/attacks/distribution'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/attacks/recent'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/intrusions'] });
+      
+      const criticalCount = result.summary.criticalIssues || 0;
+      
+      if (criticalCount > 0) {
+        toast({
+          title: "Critical Issues Detected!",
+          description: `Found ${criticalCount} critical security issues that require attention.`,
+          variant: "destructive",
+          duration: 5000,
+        });
+      } else {
+        toast({
+          title: "Scan Complete",
+          description: `Scanned ${result.summary.devicesScanned} devices. No critical issues found.`,
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error during network scan:', error);
+      toast({
+        title: "Scan Failed",
+        description: "There was an error performing the network scan. Please try again later.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    } finally {
+      setIsScanning(false);
+    }
+  };
 
   return (
     <header className="relative border-b border-[#222222] backdrop-blur-xl bg-black/80 z-50 shadow-md">
@@ -44,9 +99,17 @@ export default function TopNavigation() {
               Assistant
             </Link>
             
-            <button className="ml-3 px-5 py-2 text-sm font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-200 flex items-center">
-              <Shield className="w-4 h-4 mr-2" />
-              <span>Scan Now</span>
+            <button
+              onClick={handleNetworkScan}
+              disabled={isScanning}
+              className={`ml-3 px-5 py-2 text-sm font-medium text-white rounded-full transition-all duration-200 flex items-center ${
+                isScanning 
+                  ? 'bg-blue-700 cursor-not-allowed' 
+                  : 'bg-blue-500 hover:bg-blue-600'
+              }`}
+            >
+              <Shield className={`w-4 h-4 mr-2 ${isScanning ? 'animate-pulse' : ''}`} />
+              <span>{isScanning ? 'Scanning...' : 'Scan Now'}</span>
             </button>
           </div>
           
@@ -99,9 +162,17 @@ export default function TopNavigation() {
               Assistant
             </Link>
             <div className="px-4 py-3">
-              <button className="w-full px-5 py-2 text-sm font-medium bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all duration-200 flex items-center justify-center">
-                <Shield className="w-4 h-4 mr-2" />
-                <span>Scan Now</span>
+              <button
+                onClick={handleNetworkScan}
+                disabled={isScanning}
+                className={`w-full px-5 py-2 text-sm font-medium text-white rounded-full transition-all duration-200 flex items-center justify-center ${
+                  isScanning 
+                    ? 'bg-blue-700 cursor-not-allowed' 
+                    : 'bg-blue-500 hover:bg-blue-600'
+                }`}
+              >
+                <Shield className={`w-4 h-4 mr-2 ${isScanning ? 'animate-pulse' : ''}`} />
+                <span>{isScanning ? 'Scanning...' : 'Scan Now'}</span>
               </button>
             </div>
           </div>
