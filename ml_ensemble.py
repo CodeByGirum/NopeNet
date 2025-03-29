@@ -24,6 +24,9 @@ class IntrusionDetectionEnsemble:
         self.models = {}
         self.model_info = {}
         
+        # Import sys for stderr output
+        import sys
+        
         # Load models from files
         self.load_models(model_paths)
         
@@ -36,7 +39,8 @@ class IntrusionDetectionEnsemble:
             4: 'U2R'       # User to Root
         }
         
-        print(f"Ensemble initialized with {len(self.models)} models")
+        sys.stderr.write(f"Ensemble initialized with {len(self.models)} models\n")
+        sys.stderr.flush()
     
     def load_models(self, model_paths: Dict[str, str]) -> None:
         """
@@ -45,6 +49,8 @@ class IntrusionDetectionEnsemble:
         Args:
             model_paths: Dictionary with model names as keys and paths as values
         """
+        import sys
+        
         for model_name, path in model_paths.items():
             # Ensure directory exists
             os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -54,10 +60,10 @@ class IntrusionDetectionEnsemble:
                     # Load existing model
                     with open(path, 'rb') as f:
                         self.models[model_name] = pickle.load(f)
-                    print(f"Loaded {model_name} model from {path}")
+                    sys.stderr.write(f"Loaded {model_name} model\n")
                 else:
                     # Create a simpler placeholder model for demo purposes
-                    print(f"Model file not found: {path}")
+                    sys.stderr.write(f"Model file not found: {path}\n")
                     if model_name == 'random_forest':
                         self.models[model_name] = RandomForestClassifier(
                             n_estimators=10, max_depth=5, random_state=42)
@@ -66,7 +72,7 @@ class IntrusionDetectionEnsemble:
                         from download_models import SimpleClassifier
                         self.models[model_name] = SimpleClassifier(model_name)
                     
-                    print(f"Created placeholder {model_name} model")
+                    sys.stderr.write(f"Created placeholder {model_name} model\n")
                 
                 # Store model info
                 self.model_info[model_name] = {
@@ -76,13 +82,15 @@ class IntrusionDetectionEnsemble:
                 }
                 
             except Exception as e:
-                print(f"Error loading {model_name} model: {e}")
+                sys.stderr.write(f"Error loading {model_name} model: {e}\n")
                 self.model_info[model_name] = {
                     'type': model_name,
                     'path': path,
                     'loaded': False,
                     'error': str(e)
                 }
+            
+            sys.stderr.flush()
     
     def get_model_info(self) -> Dict[str, Any]:
         """
@@ -116,12 +124,15 @@ class IntrusionDetectionEnsemble:
         individual_preds = {}
         ensemble_pred = None
         
+        import sys
+        
         # Get predictions from each model
         for name, model in self.models.items():
             try:
                 individual_preds[name] = model.predict(features)
             except Exception as e:
-                print(f"Error predicting with {name} model: {e}")
+                sys.stderr.write(f"Error predicting with {name} model: {e}\n")
+                sys.stderr.flush()
                 # Fill with default prediction if model fails
                 individual_preds[name] = np.zeros(len(features))
         
@@ -153,7 +164,8 @@ class IntrusionDetectionEnsemble:
                             probs[i, int(pred)] = 1.0
                         proba_preds[name] = probs
                 except Exception as e:
-                    print(f"Error getting probabilities from {name} model: {e}")
+                    sys.stderr.write(f"Error getting probabilities from {name} model: {e}\n")
+                    sys.stderr.flush()
                     # Fill with uniform probabilities if model fails
                     proba_preds[name] = np.ones((len(features), len(self.attack_classes))) / len(self.attack_classes)
             

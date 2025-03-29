@@ -42,23 +42,33 @@ class SimpleClassifier:
             3: 'R2L',      # Remote to Local
             4: 'U2R'       # User to Root
         }
+        # Pre-compute some random values for predictions to make pickling easier
+        self._prediction_cache = {}
         
     def predict(self, X):
-        # Generate predictions with more normal and DoS, fewer of others
-        classes = [0, 1, 2, 3, 4]  # normal, DoS, Probe, R2L, U2R
-        probabilities = [0.4, 0.3, 0.2, 0.07, 0.03]  # Realistic distribution
-        return np.random.choice(classes, size=len(X), p=probabilities)
+        # Use array length as a simple cache key
+        length = len(X)
+        if length not in self._prediction_cache:
+            # Generate predictions with more normal and DoS, fewer of others
+            classes = [0, 1, 2, 3, 4]  # normal, DoS, Probe, R2L, U2R
+            probabilities = [0.4, 0.3, 0.2, 0.07, 0.03]  # Realistic distribution
+            import random
+            self._prediction_cache[length] = [random.choices(classes, probabilities)[0] for _ in range(length)]
+        
+        return self._prediction_cache[length]
         
     def predict_proba(self, X):
-        # Generate fake probabilities
-        probas = np.zeros((len(X), 5))
-        
-        for i in range(len(X)):
-            # Generate a probability distribution
-            p = np.random.dirichlet(np.ones(5) * 0.5)
-            probas[i] = p
-        
-        return probas
+        length = len(X)
+        # Simple random probabilities that add up to 1
+        result = []
+        import random
+        for _ in range(length):
+            # Generate 5 random values that sum to 1
+            r = [random.random() for _ in range(5)]
+            total = sum(r)
+            probas = [v/total for v in r]
+            result.append(probas)
+        return result
 
 def create_placeholder_model(model_type, output_path):
     """Create a simple placeholder model for demonstration purposes."""
@@ -81,7 +91,9 @@ def create_placeholder_model(model_type, output_path):
     with open(output_path, 'wb') as f:
         pickle.dump(model, f)
     
-    print(f"Created and saved placeholder {model_type} model to {output_path}")
+    # Output to stderr instead of stdout for better compatibility with JSON
+    sys.stderr.write(f"Created placeholder {model_type} model\n")
+    sys.stderr.flush()
     return model
 
 def download_model(model_name, url, output_path):
@@ -117,7 +129,8 @@ def download_model(model_name, url, output_path):
         
         return True
     except Exception as e:
-        print(f"Error downloading {model_name} model: {e}")
+        sys.stderr.write(f"Error downloading {model_name} model: {e}\n")
+        sys.stderr.flush()
         return False
 
 def main():
@@ -133,22 +146,23 @@ def main():
         
         # Skip if model already exists
         if os.path.exists(output_path):
-            print(f"{model_name.capitalize()} model already exists at {output_path}")
+            sys.stderr.write(f"{model_name.capitalize()} model already exists\n")
             success_count += 1
             continue
         
         if model_name in MODEL_URLS:
             url = MODEL_URLS[model_name]
-            print(f"Preparing {model_name} model...")
+            sys.stderr.write(f"Preparing {model_name} model...\n")
             if download_model(model_name, url, output_path):
                 success_count += 1
         else:
             # Create placeholder for any model not in MODEL_URLS
-            print(f"Creating placeholder {model_name} model...")
+            sys.stderr.write(f"Creating placeholder {model_name} model...\n")
             create_placeholder_model(model_name, output_path)
             success_count += 1
     
-    print(f"\nModel preparation completed: {success_count}/{len(MODEL_DIRS)} models ready.")
+    sys.stderr.write(f"Model preparation completed: {success_count}/{len(MODEL_DIRS)} models ready.\n")
+    sys.stderr.flush()
     
     # Create a models list file for reference
     with open('models/models_list.txt', 'w') as f:

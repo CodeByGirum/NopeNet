@@ -7,6 +7,7 @@ import { WebSocketServer } from "ws";
 import OpenAI from "openai";
 import { exec } from "child_process";
 import { promisify } from "util";
+import * as fs from "fs";
 
 // Convert exec to Promise-based
 const execAsync = promisify(exec);
@@ -121,7 +122,12 @@ async function scanNetwork(): Promise<ScanResult> {
     
     // Use Python script to analyze the traffic with ML ensemble
     try {
-      // Call the Python intrusion detection script with our traffic data
+      // Write traffic data to a temporary file
+      const trafficDataJSON = JSON.stringify({ traffic: trafficData });
+      const tempFilePath = `/tmp/traffic_data_${Date.now()}.json`;
+      await fs.promises.writeFile(tempFilePath, trafficDataJSON);
+      
+      // Call the Python script with the file path
       const pythonScript = `
 import sys
 import json
@@ -133,17 +139,22 @@ sys.path.append(os.getcwd())
 # Import our detection function
 from intrusion_detector import process_json_input
 
-# Read input traffic data
-input_data = json.loads('''${JSON.stringify({ traffic: trafficData })}''')
+# Read the traffic data from file
+with open('${tempFilePath}', 'r') as f:
+    traffic_data_str = f.read()
 
 # Process the data
-results = process_json_input(json.dumps(input_data))
+results = process_json_input(traffic_data_str)
 
 # Output results as JSON
 print(json.dumps(results))
 `;
 
       const { stdout } = await execAsync(`python3 -c "${pythonScript}"`);
+      
+      // Clean up the temporary file
+      await fs.promises.unlink(tempFilePath).catch(err => console.error('Error cleaning up temp file:', err));
+      
       const detectionResults = JSON.parse(stdout);
 
       if (detectionResults.error) {
