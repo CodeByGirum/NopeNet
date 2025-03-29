@@ -702,6 +702,81 @@ When asked for recommendations, provide specific actionable steps.`;
       res.status(500).json({ message: 'Failed to process chat message' });
     }
   });
+
+  // Manual Traffic Analysis endpoint
+  app.post('/api/analyze/traffic', async (req: Request, res: Response) => {
+    try {
+      const { traffic } = req.body;
+      
+      if (!traffic || !Array.isArray(traffic) || traffic.length === 0) {
+        return res.status(400).json({ error: 'Valid traffic data is required' });
+      }
+      
+      // Import Node.js path and child_process modules if needed
+      const path = require('path');
+      const { spawn } = require('child_process');
+      
+      // Use the existing Python intrusion detection script
+      // Write the data to a temporary file and read back the result
+      const tempFilePath = path.join(process.cwd(), 'temp_traffic_data.json');
+      fs.writeFileSync(tempFilePath, JSON.stringify({ traffic }));
+      
+      const pythonProcess = spawn('python3', ['intrusion_detector.py'], {
+        cwd: process.cwd()
+      });
+      
+      // Pass the data to Python script via stdin
+      pythonProcess.stdin.write(JSON.stringify({ traffic }));
+      pythonProcess.stdin.end();
+      
+      let resultData = '';
+      pythonProcess.stdout.on('data', (data: Buffer) => {
+        resultData += data.toString();
+      });
+      
+      pythonProcess.stderr.on('data', (data: Buffer) => {
+        console.log('Python stderr:', data.toString());
+      });
+      
+      // Wait for Python process to complete
+      await new Promise<void>((resolve, reject) => {
+        pythonProcess.on('close', (code: number) => {
+          if (code !== 0) {
+            console.error(`Python process exited with code ${code}`);
+            reject(new Error(`Python process exited with code ${code}`));
+          } else {
+            resolve();
+          }
+        });
+      });
+      
+      // Clean up the temp file
+      try {
+        fs.unlinkSync(tempFilePath);
+      } catch (error) {
+        console.error('Error removing temp file:', error);
+      }
+      
+      // Parse the result
+      let analysisResult;
+      try {
+        analysisResult = JSON.parse(resultData);
+      } catch (error) {
+        console.error('Error parsing Python output:', error);
+        console.error('Raw output:', resultData);
+        return res.status(500).json({ 
+          error: 'Failed to parse analysis results',
+          raw: resultData
+        });
+      }
+      
+      res.json(analysisResult);
+      
+    } catch (error) {
+      console.error('Traffic analysis error:', error);
+      res.status(500).json({ error: 'Failed to analyze traffic data' });
+    }
+  });
   
   return httpServer;
 }
