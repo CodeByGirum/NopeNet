@@ -114,9 +114,10 @@ export default function Dataset() {
   
   // Custom circle animation for radar
   const CustomizedDot = (props: any) => {
-    const { cx, cy, value } = props;
+    const { cx, cy, value, index } = props;
     return (
       <circle 
+        key={`dot-${index}`}
         cx={cx} 
         cy={cy} 
         r={5} 

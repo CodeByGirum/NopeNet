@@ -1,0 +1,61 @@
+Warning: Each child in a list should have a unique &quot;key&quot; prop.
+
+Check the render method of `Animate`. See https://reactjs.org/link/warning-keys for more information.
+    at circle
+    at Animate2 (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:18597:5)
+    at g
+    at https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:6113:25
+    at Radar2 (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:22956:5)
+    at svg
+    at Surface (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:6052:25)
+    at div
+    at ChartLayoutContextProvider2 (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:25434:28)
+    at CategoricalChartWrapper2 (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:30715:7)
+    at CategoricalChart2
+    at div
+    at https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:9256:21
+    at div
+    at div
+    at CyberCardContent (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/components/ui/cybercard.tsx:42:36)
+    at div
+    at CyberCard (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/components/ui/cybercard.tsx:19:3)
+    at div
+    at div
+    at section
+    at Dataset (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/pages/dataset.tsx:136:44)
+    at Route (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c3631e68:323:16)
+    at Switch (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c3631e68:379:17)
+    at main
+    at div
+    at Router
+    at QueryClientProvider (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=c3631e68:2805:3)
+    at App
+Warning: Each child in a list should have a unique &quot;key&quot; prop.
+
+Check the render method of `Radar`. See https://reactjs.org/link/warning-keys for more information.
+    at circle
+    at Radar2 (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:22956:5)
+    at svg
+    at Surface (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:6052:25)
+    at div
+    at ChartLayoutContextProvider2 (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:25434:28)
+    at CategoricalChartWrapper2 (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:30715:7)
+    at CategoricalChart2
+    at div
+    at https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/recharts.js?v=c3631e68:9256:21
+    at div
+    at div
+    at CyberCardContent (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/components/ui/cybercard.tsx:42:36)
+    at div
+    at CyberCard (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/components/ui/cybercard.tsx:19:3)
+    at div
+    at div
+    at section
+    at Dataset (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/pages/dataset.tsx:136:44)
+    at Route (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c3631e68:323:16)
+    at Switch (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c3631e68:379:17)
+    at main
+    at div
+    at Router
+    at QueryClientProvider (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=c3631e68:2805:3)
+    at App
