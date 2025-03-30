@@ -1,0 +1,58 @@
+The above error occurred in the <TextPressure> component:
+
+    at TextPressure (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/components/text/TextPressure.tsx:20:3)
+    at div
+    at h1
+    at div
+    at div
+    at div
+    at section
+    at HeroSection
+    at Home (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/pages/home.tsx:24:23)
+    at Route (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c3631e68:323:16)
+    at Switch (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c3631e68:379:17)
+    at main
+    at div
+    at Router
+    at QueryClientProvider (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=c3631e68:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+The above error occurred in the <ScanDialog> component:
+
+    at ScanDialog (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/components/scan/ScanDialog.tsx:35:38)
+    at div
+    at div
+    at div
+    at div
+    at section
+    at HeroSection
+    at Home (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/pages/home.tsx:24:23)
+    at Route (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c3631e68:323:16)
+    at Switch (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c3631e68:379:17)
+    at main
+    at div
+    at Router
+    at QueryClientProvider (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=c3631e68:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+The above error occurred in the <TextPressure> component:
+
+    at TextPressure (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/src/components/text/TextPressure.tsx:20:3)
+    at a
+    at https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=c3631e68:337:18
+    at div
+    at div
+    at footer
+    at Footer
+    at div
+    at Router
+    at QueryClientProvider (https://52f69e6c-7456-466e-8874-8505ac936aad-00-22p4xoutw2wvy.janeway.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=c3631e68:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+Cannot read properties of null (reading 'useRef')
