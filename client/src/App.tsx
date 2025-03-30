@@ -9,6 +9,7 @@ import Intrusions from "@/pages/intrusions";
 import Education from "@/pages/education";
 import Dataset from "@/pages/dataset";
 import Assistant from "@/pages/assistant";
+import ManualInput from "@/pages/manual-input";
 import NotFound from "@/pages/not-found";
 
 import TopNavigation from "@/components/layout/TopNavigation";
@@ -27,6 +28,7 @@ function Router() {
           <Route path="/education" component={Education} />
           <Route path="/dataset" component={Dataset} />
           <Route path="/assistant" component={Assistant} />
+          <Route path="/manual-input" component={ManualInput} />
           <Route component={NotFound} />
         </Switch>
       </main>
