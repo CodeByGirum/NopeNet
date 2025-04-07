@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface TextPressureProps {
   text: string;
@@ -12,8 +12,7 @@ interface TextPressureProps {
   staggerDelay?: number;
 }
 
-// Using function declaration instead of arrow function to avoid React hooks error
-function TextPressure({
+const TextPressure: React.FC<TextPressureProps> = ({
   text,
   className = '',
   fontSize = 36,
@@ -23,7 +22,7 @@ function TextPressure({
   duration = 0.3,
   delay = 0,
   staggerDelay = 0.03,
-}: TextPressureProps) {
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [characters, setCharacters] = useState<JSX.Element[]>([]);
@@ -68,6 +67,6 @@ function TextPressure({
       {characters}
     </div>
   );
-}
+};
 
 export default TextPressure;

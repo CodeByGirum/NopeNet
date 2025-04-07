@@ -138,25 +138,3 @@ export type Stats = typeof stats.$inferSelect;
 
 export type DatasetInfo = typeof datasetInfo.$inferSelect;
 export type ModelPerformance = typeof modelPerformance.$inferSelect;
-
-// Manual Scan Results
-export const manualScanResults = pgTable("manual_scan_results", {
-  id: serial("id").primaryKey(),
-  timestamp: timestamp("timestamp").notNull().defaultNow(),
-  input: text("input").notNull(),
-  result: text("result").notNull(),
-  isAttack: boolean("is_attack").notNull(),
-  attackType: text("attack_type"),
-  confidence: integer("confidence").notNull(),
-});
-
-export const insertManualScanResultSchema = createInsertSchema(manualScanResults).pick({
-  input: true,
-  result: true,
-  isAttack: true,
-  attackType: true,
-  confidence: true,
-});
-
-export type InsertManualScanResult = z.infer<typeof insertManualScanResultSchema>;
-export type ManualScanResult = typeof manualScanResults.$inferSelect;

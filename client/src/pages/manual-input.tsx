@@ -106,7 +106,7 @@ export default function ManualInputPage() {
   };
 
   return (
-    <div className="container max-w-5xl py-10 px-6 mx-auto">
+    <div className="container max-w-5xl py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Manual Traffic Analysis</h1>
         <p className="text-gray-400">

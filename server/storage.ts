@@ -6,8 +6,7 @@ import {
   chatMessages, type ChatMessage, type InsertChatMessage,
   stats, type Stats, type InsertStats,
   datasetInfo, type DatasetInfo,
-  modelPerformance, type ModelPerformance,
-  manualScanResults, type ManualScanResult
+  modelPerformance, type ModelPerformance
 } from "@shared/schema";
 
 // Interface for all storage operations
@@ -47,10 +46,6 @@ export interface IStorage {
   // Dashboard data operations
   getAttackDistribution(timeRange: string): Promise<{ timeRange: string, distribution: AttackDistributionItem[] }>;
   getRecentAttackTypes(): Promise<RecentAttackTypeItem[]>;
-  
-  // Manual scan operations
-  saveManualScanResult(input: string, result: any): Promise<number>;
-  getLatestManualScanResults(limit: number): Promise<ManualScanResult[]>;
 }
 
 // Extended interface types
@@ -97,7 +92,6 @@ export class MemStorage implements IStorage {
   private statsData: Stats;
   private datasetInfoData: DatasetInfo;
   private modelPerformanceData: ModelPerformance[];
-  private manualScanResultsData: Map<number, ManualScanResult>;
   
   private currentUserId: number = 1;
   private currentAttackTypeId: number = 1;
@@ -105,7 +99,6 @@ export class MemStorage implements IStorage {
   private currentSecurityTipId: number = 1;
   private currentChatMessageId: number = 1;
   private currentStatsId: number = 1;
-  private currentManualScanResultId: number = 1;
   
   constructor() {
     this.users = new Map();
@@ -113,7 +106,6 @@ export class MemStorage implements IStorage {
     this.intrusionsData = new Map();
     this.securityTipsData = new Map();
     this.chatMessagesData = new Map();
-    this.manualScanResultsData = new Map();
     
     // Initialize stats with default values
     this.statsData = {
@@ -635,38 +627,6 @@ export class MemStorage implements IStorage {
     }
     
     return result;
-  }
-
-  // Manual scan methods
-  async saveManualScanResult(input: string, result: any): Promise<number> {
-    const id = this.currentManualScanResultId++;
-    const timestamp = new Date();
-    
-    // Parse the result to get required fields
-    const isAttack = result.isAttack || false;
-    const attackType = result.attackType || 'Unknown';
-    const confidence = Math.round((result.confidence || 0) * 100);
-    
-    const newScanResult: ManualScanResult = {
-      id,
-      timestamp,
-      input,
-      result: JSON.stringify(result),
-      isAttack,
-      attackType,
-      confidence
-    };
-    
-    this.manualScanResultsData.set(id, newScanResult);
-    return id;
-  }
-  
-  async getLatestManualScanResults(limit: number): Promise<ManualScanResult[]> {
-    const results = Array.from(this.manualScanResultsData.values())
-      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-      .slice(0, limit);
-    
-    return results;
   }
 }
 

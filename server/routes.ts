@@ -789,7 +789,7 @@ When asked for recommendations, provide specific actionable steps.`;
             { name: "flag", value: lines[0].split(',')[3], significance: 0.5 }
           ],
           explanation: "Analysis completed based on the provided KDD Cup 1999 format data. The traffic pattern shows characteristics consistent with " +
-                      (Math.random() > 0.5 ? "potential attack vectors" : "normal traffic"),
+                      (analysisResult?.isAttack ? `${analysisResult?.attackType} attacks` : "normal traffic"),
           recommendations: [
             "Keep systems and software updated with security patches",
             "Monitor network traffic for unusual patterns",
